@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>AvidReader - список прочитанных книг</title>
+  <title>BifLib - список прочитанных книг</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
@@ -15,7 +15,10 @@
 </head>
 <body>
  <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
-  <a class="navbar-brand" href="{{ url_for('index') }}"><i class="fa fa-book-open" style="padding-right:5px"></i>AvidReader</a>
+  <a class="navbar-brand" href="{{ url_for('index') }}">
+    <!-- <i class="fa fa-book-open" style="padding-right:5px"> -->
+      <img rel="icon" id="icon_brand" src="uploads/icon.png" style="width: 35px">
+    </i>BifLib</a>
 
   <!-- Ссылки -->
   <a class="btn btn-info  mr-2" href="{{ url_for('index') }}" role="button">Все книги</a>
@@ -66,7 +69,7 @@
         <div class="row">
           <div class="col-md-8 col-sm-6 col-xs-12">
             <p class="copyright-text">&copy; 2022 Все права защищены 
-         <a href="#">AvidReader</a>.
+         <a href="#">BifLib</a>.
             </p>
           </div>
 
