@@ -37,6 +37,9 @@ body {
   font-weight:400;
 }
 
+.bg-dark {
+  background-color: rgb(33, 34, 36)!important;
+}
 
 h1,
 .h1 {
@@ -254,7 +257,7 @@ a:hover {
 
 .site-footer
 {
-  background-color:#343a40!important;
+  background-color:rgb(33, 34, 36)!important;
   padding:45px 0 20px;
   font-size:15px;
   line-height:24px;
