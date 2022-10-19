@@ -119,3 +119,8 @@ def delete(book_id):
 def data():
   data = Book.query.all()
   return jsonify(data)  
+
+#test
+@app.route('/test/')
+def test():
+    return render_template('test.html')
