@@ -21,17 +21,17 @@ def book(book_id):
     book = Book.query.get_or_404(book_id)
     return render_template('book.html', book=book)      
 
-@app.route('/thrillers/')
-def thrillers():
+@app.route('/genre/')
+def genre():
     page = request.args.get('page', 1, type=int)
     books = Book.query.filter(Book.genre == 'триллер').paginate(page=page, per_page=4)
-    return render_template('thrillers.html', books=books)
+    return render_template('genre.html', books=books)
 
-@app.route('/best/')
-def best():
+@app.route('/account/')
+def account():
     page = request.args.get('page', 1, type=int)
     books = Book.query.filter(Book.rating > 4).paginate(page=page, per_page=4)
-    return render_template('best.html', books=books)      
+    return render_template('account.html', books=books)      
 
 def save_picture(cover):
     random_hex = secrets.token_hex(8)
@@ -119,6 +119,10 @@ def delete(book_id):
 def data():
   data = Book.query.all()
   return jsonify(data)  
+
+@app.route('/authors/')
+def authors():
+    return render_template('authors.html')
 
 #test
 @app.route('/test/')
