@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 @app.route('/')
 def index():
     page = request.args.get('page', 1, type=int)
-    books = Book.query.order_by(Book.created_at.desc()).paginate(page=page, per_page=4)
+    books = Book.query.order_by(Book.year_publication.desc()).paginate(page=page, per_page=4)
     return render_template('index.html', books=books)
 
 @app.route('/uploads/<filename>')
