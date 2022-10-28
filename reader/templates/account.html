@@ -1,53 +1,117 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <div class="container mx-auto mt-4">
-  <div class="d-flex justify-content-center">
-
-{% for book in books.items %}
-
-<div class="card">
-  <div class="card-img">
-    <img class="card-img" src="{{ url_for('send_file', filename=book.cover) }}" alt="{{ book.cover }}">
-    <span><h4>{{ book.genre }}</h4></span>
-    <div class="overlay">
-      <div class="overlay-content">
-        <a href="{{ url_for('book', book_id=book.id) }}">Подробнее</a>
-      </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>BifLib - список прочитанных книг</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/69e2443572.js" crossorigin="anonymous"></script>
+<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
+<a class="navbar-brand" href="{{ url_for('index') }}">
+  <!-- <i class="fa fa-book-open" style="padding-right:5px"> -->
+    <img rel="icon" id="icon_brand" src="../uploads/icon.png" style="width: 35px">
+  </i>BifLib</a>
+<!-- Ссылки -->
+<a class="btn btn-info  mr-2" href="{{ url_for('index') }}" role="button">Книги</a>
+<a class="btn btn-info mr-2" href="{{ url_for('authors') }}" role="button">Авторы</a>
+<a class="btn btn-info mr-2" href="{{ url_for('genre') }}" role="button">Жанры</a>
+<a class="btn btn-info mr-2" href="{{ url_for('account') }}" role="button">Личный кабинет</a> 
+</nav>
+<div class="row justify-content-center">
+  <div class="lk-content-authorization">
+    <div class="rofl_lk_img">
+      <img class="rofl_img" src="../uploads/rofl.png">
     </div>
-  </div>
-  <div class="card-content">
-      <h2>{{ book.title }}</h2>
-      <h2>{% set stars = book.rating | int %}
-          {% for n in range(stars) %}
-          <span class="fa fa-star checked" style="color:orange"></span>
-          {% endfor %}
-       </h2>
-      <p>{{ book.description }}</p>
-     <div class="btn-wrapper text-center d-flex justify-content-between">
-      <button type="button" class="btn btn-info btn-sm"> 
-       <a href="{{ url_for('edit', book_id=book.id) }}" style="color:white"><i class="fas fa-pen"></i> Изменить</a>
-      </button>
-       <form action="{{ url_for('delete', book_id=book.id) }}" method="POST">
-         <button class='btn btn-danger btn-sm' type="submit" value="Удалить" onclick="return confirm('Удалить книгу?')"><i class="fa fa-times"></i> Удалить</button>
-       </form>
-     </div>
+    <fieldset class="fields-authorization" style="margin:auto;">
+      <legend class="heading">Авторизация</legend>
+      <div class="form-group-authorization">
+        <label class="form-authorization-label" for="login">Логин</label>
+        <input class="form-authorization-control" id="login" name="login" required="true" type="text" value="" placeholder="  Имя пользователя">
+      </div>
+      <div class="form-group-authorization">
+        <label class="form-authorization-label" for="password">Пароль</label>
+        <input class="form-authorization-control" id="password" name="password" required="true" type="text" value="" placeholder="  Пароль">
+      </div>
+      <div class="form-group-btn">
+        <input class="btn-authorization" id="btn-authorization" name="btn-authorization" type="submit" value="Войти">
+        <div class="loader">
+          <div class="check">
+            <span class="check-one"></span>
+            <span class="check-two"></span>
+          </div>
+        </div>
+    </div>
+    </fieldset>
   </div>
 </div>
-{% endfor %}
+<!-- Футер -->
+<footer class="site-footer">
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-6">
+      <h6>Цитата дня</h6>
+      <p class="text-justify">«Книги — корабли мысли, странствующие по волнам времени и бережно несущие свой драгоценный груз от поколения к поколению»</p>
+    </div>
+    <div class="col-xs-6 col-md-3">
+      <h6>Жанры</h6>
+      <ul class="footer-links">
+        <li><a href="">Триллеры</a></li>
+        <li><a href="">Детективы</a></li>
+        <li><a href="">Фантастика</a></li>
+        <li><a href="">Фэнтези</a></li>
+        <li><a href="">Биографии</a></li>
+        <li><a href="">Программирование</a></li>
+      </ul>
+    </div>
+    <div class="col-xs-6 col-md-3">
+      <h6>Разделы</h6>
+      <ul class="footer-links">
+        <li><a href="">Купить книги</a></li>
+        <li><a href="">Рецензии</a></li>
+        <li><a href="">Заметки</a></li>
+        <li><a href="">Цитаты</a></li>
+        <li><a href="">Экранизации</a></li>
+      </ul>
+    </div>
   </div>
-   </div>
+  <hr>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-sm-6 col-xs-12">
+      <p class="copyright-text">&copy; 2022 Все права защищены 
+    <a href="#">BifLib</a>.
+      </p>
+    </div>
 
-    {% for page_num in books.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-      {% if page_num %}
-        {% if books.page == page_num %}
-          <a class="btn btn-info mb-4" href="{{ url_for('account', page=page_num) }}">{{ page_num }}</a>
-        {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('account', page=page_num) }}">{{ page_num }}</a>
-        {% endif %}
-      {% else %}
-        ...
-      {% endif %}
-    {% endfor %} 
-{% endblock %}
-
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <ul class="social-icons">
+        <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
+        <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+        <li><a class="dribbble" href="#"><i class="fa fa-telegram"></i></a></li>
+        <li><a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a></li>   
+      </ul>
+    </div>
+  </div>
+</div>
+</footer>
+<script src="../static/js/authorization_control.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script id="rendered-js" >
+$(document).ready(function () {
+$('.card').delay(1800).queue(function (next) {
+$(this).removeClass('hover');
+$('a.hover').removeClass('hover');
+next();
+});
+});
+</script>
+</body>
+</html>
