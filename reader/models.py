@@ -1,19 +1,25 @@
+#database and display model relationship
+from cgitb import text
+from datetime import date
+from pickletools import int4
+import string
+from tokenize import String
+from typing import Text
+from sqlalchemy import BOOLEAN, DATE, DATETIME, FLOAT, INTEGER, Boolean, Date, DateTime, Float, Integer
 from reader import app, db
 from sqlalchemy.sql import func
 from dataclasses import dataclass
 
 @dataclass
 class Book(db.Model):
-    id: int
+    book_id: int
     title: str
-    author: str
-    genre: str
     cover: str
     rating: int
     description: str
     notes: str
-    year_publication: str
-    price: str
+    year_publication: date
+    price: float
     sale: bool
     weight: int
     page_count: int
@@ -21,118 +27,136 @@ class Book(db.Model):
     library_text: str
     affinity: str
     count: int
-    
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), unique=True, nullable=False)
-    author = db.Column(db.String(100), nullable=False)
-    genre = db.Column(db.String(20), nullable=False)
-    rating = db.Column(db.Integer)
-    cover = db.Column(db.String(50), nullable=False, default='default.jpg')
-    description = db.Column(db.Text)
-    notes = db.Column(db.Text)
-    year_publication = db.Column(db.Date())
-    price = db.Column(db.Float)
-    sale = db.Column(db.Boolean)
-    weight = db.Column(db.Integer)
-    page_count = db.Column(db.Integer)
-    price_type = db.Column(db.Boolean)
+    #Foreign Keys 
+    author_id: int
+    genre_id: int
+    publish_id : int
+    type_id : int 
+    level_id: int  
+
+    #initialization of the book database fields 
+    book_id = db.Column(INTEGER, primary_key=True) 
+    title = db.Column(INTEGER, unique=True, nullable=False)
+    rating = db.Column(FLOAT)
+    cover = db.Column(db.String(100), nullable=False, default='default.jpg')
+    description = db.Column(Text)
+    notes = db.Column(Text)
+    year_publication = db.Column(DATE)
+    price = db.Column(FLOAT)
+    sale = db.Column(BOOLEAN)
+    weight = db.Column(INTEGER)
+    page_count = db.Column(INTEGER)
+    price_type = db.Column(BOOLEAN)
     library_text = db.Column(db.String(1000), nullable=False)
     affinity = db.Column(db.String(250), nullable=False)
-    count = db.Column(db.Integer)
+    count = db.Column(INTEGER)
+    #initialization of Foreign Keys 
+    author_id = db.Column(INTEGER , nullable=False)
+    genre_id = db.Column(INTEGER, nullable=False)
+    publish_id = db.Column(INTEGER, nullable=False)
+    type = db.Column(INTEGER, nullable=False)
+    level = db.Column(INTEGER, nullable=False)
     
     def __repr__(self):
         return f'<Book {self.title}>'
 
-@dataclass
+@dataclass# Author Table
 class Author(db.Model):
-    id: int
+    author_id: int
     first_name: str
     surname: str
     last_name: str
     
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(25), nullable=False)
-    surname = db.Column(db.String(25), nullable=False)
-    last_name = db.Column(db.String(25), nullable=False)
+    #initialization of the author database fields 
+    author_id = db.Column(INTEGER, primary_key=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    surname = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
         return f'<Author {self.first_name} {self.surname} {self.last_name}>'
 
-@dataclass
+@dataclass # Genre Table
 class Genre(db.Model):
-    id: int
+    genre_id: int
     name: str
     
-    id = db.Column(db.Integer, primary_key=True)
+    #initialization of the genre database fields 
+    genre_id = db.Column(INTEGER, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
 
     def __repr__(self):
         return f'<Genre {self.name}>'
 
-@dataclass
+@dataclass # Delivery Table
 class Delivery(db.Model):
-    id: int
-    date: str
-    count: str
+    delivery_id: int
+    date: DateTime
+    count: int
     description: str
-    weight: str
+    weight: int
+    #Foreign Key 
+    client_id : int
     
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.DateTime(timezone=True),
-                    server_default=func.now())
-    count = db.Column(db.Integer, nullable=False)
+    #initialization of the Delivery database fields 
+    delivery_id = db.Column(INTEGER, primary_key=True)
+    date = db.Column(DATETIME)
+    count = db.Column(INTEGER, nullable=False)
     description = db.Column(db.String(500), nullable=False)
-    weight = db.Column(db.Integer, nullable=False)
+    weight = db.Column(INTEGER, nullable=False)
+    #initialization of Foreign Key 
+    client_id = db.Column(INTEGER, nullable=False)
 
     def __repr__(self):
-        return f'<Delivery {self.id} {self.date}>'
+        return f'<Delivery {self. delivery_id} {self.date}>'
 
-@dataclass
+@dataclass #Client Table
 class Client(db.Model):
-    id: int
+    client_id: int
     first_name: str
     surname: str
     last_name: str
-    last_logon: str
+    last_logon: DateTime
     phone: str
     zipcode: str
     password: str
     email: str
     
-    id = db.Column(db.Integer, primary_key=True)
+    #initialization of the Client database fields 
+    client_id = db.Column(INTEGER, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     surname = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    last_logon = db.Column(db.DateTime(timezone=True))
-    phone = db.Column(db.String(50), nullable=False)
-    zipcode = db.Column(db.String(50), nullable=False)
+    last_logon = db.Column(DATETIME, nullable=False)
+    phone = db.Column(db.String(15), nullable=False)
+    zipcode = db.Column(db.String(10), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), nullable=False)
     
     def __repr__(self):
-        return f'<Client {self.id}>'
+        return f'<Client {self.client_id}>'
 
-@dataclass
+@dataclass #Administrator Table
 class Admin(db.Model):
-    id: int
+    admin_id: int
     first_name: str
     surname: str
     last_name: str
-    last_logon: str
-    reg_date: str
+    last_logon: DateTime
+    reg_date: DateTime
     phone: str
     zipcode: str
     password: str
     login: str
     email: str
     
-    id = db.Column(db.Integer, primary_key=True)
+    #initialization of the Admin database fields 
+    admin_id= db.Column(INTEGER, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     surname = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    last_logon = db.Column(db.DateTime(timezone=True))
-    reg_date = db.Column(db.DateTime(timezone=True),
-                    server_default=func.now())
+    last_logon = db.Column(DATETIME, nullable=False)
+    reg_date = db.Column(DATETIME, nullable=False)
     phone = db.Column(db.String(50), nullable=False)
     zipcode = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
@@ -140,4 +164,40 @@ class Admin(db.Model):
     email = db.Column(db.String(50), nullable=False)
     
     def __repr__(self):
-        return f'<Admin {self.id} {self.first_name}>'
+        return f'<Admin {self. admin_id} {self.first_name}>'
+
+@dataclass #Publish Table
+class Publish(db.Model):
+    publish_id: int
+    name: str 
+
+    #initialization of the Publish database fields
+    publish_id = db.Column(INTEGER, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+
+    def __repr__(self):
+        return f'<Publish {self.name}>'
+
+@dataclass # PubType Table
+class Type(db.Model):
+    type_id: int
+    name: str 
+
+    #initialization of the Type database fields
+    type_id = db.Column(INTEGER, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+
+    def __repr__(self):
+        return f'<Publish {self.name}>'
+
+@dataclass # EdLevel Table
+class Level(db.Model):
+    Level_id: int
+    name: str 
+
+    #initialization of the Level database fields
+    Level_id = db.Column(INTEGER, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+
+    def __repr__(self):
+        return f'<Level {self.name}>'
