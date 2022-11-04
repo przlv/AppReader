@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 @app.route('/')
 def index():
     page = request.args.get('page', 1, type=int)
-    books = Book.query.order_by(Book.created_at.desc()).paginate(page=page, per_page=4)
+    books = Book.query.order_by(Book.created_at.desc()).paginate(page=page, per_page=12)
     return render_template('index.html', books=books)
 
 @app.route('/uploads/<filename>')
@@ -24,13 +24,13 @@ def book(book_id):
 @app.route('/genre/')
 def genre():
     page = request.args.get('page', 1, type=int)
-    books = Book.query.filter(Book.genre == 'триллер').paginate(page=page, per_page=4)
+    books = Book.query.filter(Book.genre == 'триллер').paginate(page=page, per_page=6)
     return render_template('genre.html', books=books)
 
 @app.route('/account/')
 def account():
     page = request.args.get('page', 1, type=int)
-    books = Book.query.filter(Book.rating > 4).paginate(page=page, per_page=4)
+    books = Book.query.filter(Book.rating > 4).paginate(page=page, per_page=6)
     return render_template('account.html', books=books)      
 
 def save_picture(cover):
