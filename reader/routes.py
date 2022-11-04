@@ -124,6 +124,10 @@ def data():
 def authors():
     return render_template('authors.html')
 
+@app.route('/profile/')
+def profile():
+    return render_template('profile.html')
+
 #test
 @app.route('/test/')
 def test():
