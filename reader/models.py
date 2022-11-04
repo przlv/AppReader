@@ -10,7 +10,7 @@ from reader import app, db
 from sqlalchemy.sql import func
 from dataclasses import dataclass
 
-@dataclass
+@dataclass #Book Table
 class Book(db.Model):
     book_id: int
     title: str
@@ -111,60 +111,38 @@ class Delivery(db.Model):
         return f'<Delivery {self. delivery_id} {self.date}>'
 
 @dataclass #Client Table
-class Client(db.Model):
-    client_id: int
+class User(db.Model):
+    user_id: int
     first_name: str
     surname: str
     last_name: str
     last_logon: DateTime
     phone: str
     zipcode: str
+    address: str
+    email : str
+    login: str
     password: str
-    email: str
+    RegDate: DateTime
+    UserType : str
     
     #initialization of the Client database fields 
-    client_id = db.Column(INTEGER, primary_key=True)
+    user_id = db.Column(INTEGER, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     surname = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     last_logon = db.Column(DATETIME, nullable=False)
     phone = db.Column(db.String(15), nullable=False)
     zipcode = db.Column(db.String(10), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+    address = db.Column(db.String(50),nulltable = False)
     email = db.Column(db.String(50), nullable=False)
-    
-    def __repr__(self):
-        return f'<Client {self.client_id}>'
-
-@dataclass #Administrator Table
-class Admin(db.Model):
-    admin_id: int
-    first_name: str
-    surname: str
-    last_name: str
-    last_logon: DateTime
-    reg_date: DateTime
-    phone: str
-    zipcode: str
-    password: str
-    login: str
-    email: str
-    
-    #initialization of the Admin database fields 
-    admin_id= db.Column(INTEGER, primary_key=True)
-    first_name = db.Column(db.String(50), nullable=False)
-    surname = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
-    last_logon = db.Column(DATETIME, nullable=False)
-    reg_date = db.Column(DATETIME, nullable=False)
-    phone = db.Column(db.String(50), nullable=False)
-    zipcode = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
     login = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(50), nullable=False)
+    RegDate = db.Column(DATETIME, nullable=False)
+    UserType = db.Column(db.String(10), nullable=False)
     
     def __repr__(self):
-        return f'<Admin {self. admin_id} {self.first_name}>'
+        return f'<Client {self.user_id}{self.first_name}>'
 
 @dataclass #Publish Table
 class Publish(db.Model):
