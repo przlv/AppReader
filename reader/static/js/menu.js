@@ -28,7 +28,7 @@ const items = [
 {
   name: "О нас",
   color: "#3f51b5",
-  href: "#" }];
+  href: "/about" }];
 
 
 

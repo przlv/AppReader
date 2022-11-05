@@ -129,6 +129,6 @@ def profile():
     return render_template('profile.html')
 
 #test
-@app.route('/test/')
-def test():
-    return render_template('test.html')
+@app.route('/about/')
+def about():
+    return render_template('about.html')
