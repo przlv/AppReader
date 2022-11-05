@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>BifLib - список прочитанных книг</title>
+  <title>Твой BifLib</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
@@ -12,29 +12,16 @@
   <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
   <link rel="shortcut icon" href="../uploads/icon.ico">
+  <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet">
 </head>
 <body>
- <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
-  <a class="navbar-brand" href="{{ url_for('index') }}">
-    <!-- <i class="fa fa-book-open" style="padding-right:5px"> -->
-      <img rel="icon" id="icon_brand" src="../uploads/icon.png" style="width: 35px">
-    </i>BifLib</a>
 
-  <!-- Ссылки -->
-  <a class="btn btn-info mr-2" href="{{ url_for('index') }}" role="button">Книги</a>
-  <a class="btn btn-info mr-2" href="{{ url_for('authors') }}" role="button">Авторы</a>
-  <a class="btn btn-info mr-2" href="{{ url_for('genre') }}" role="button">Жанры</a>
-  <a class="btn btn-info mr-2" href="{{ url_for('account') }}" role="button">Личный кабинет</a> 
- </nav>
-<div class="container mx-auto mt-5 mb-5">
-  <div class="row justify-content-center">
-    <!-- Карточки книг -->
-    {% block content %} {% endblock %}
-    </div>
-  </div> 
+<div id="root"></div>
+
+{% block content %} {% endblock %}
 
 <!-- Футер -->
-    <footer class="site-footer">
+<footer class="site-footer">
       <div class="container">
         <div class="row">
           <div class="col-sm-12 col-md-6">
@@ -85,7 +72,11 @@
       </div>
 </footer>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-<script id="rendered-js" >
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.0.5/gsap.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js'></script>
+  <script src="../static/js/script.js"></script>
+  <script id="rendered-js" >
 $(document).ready(function () {
   $('.card').delay(1800).queue(function (next) {
     $(this).removeClass('hover');
