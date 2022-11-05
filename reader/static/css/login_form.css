@@ -10,8 +10,8 @@
 	font-weight: 300;
 	font-size: 15px;
 	line-height: 1.7;
-	color: #ececec;
-	background-color: rgb(33, 34, 36);
+	color: #2a2b38;
+	background-color: #fafafa;
 	overflow-x: hidden;
 }
 a {
@@ -34,6 +34,7 @@ p {
 }
 h4 {
   font-weight: 600;
+  color:#ececec;
 }
 h6 span{
   padding: 0 20px;

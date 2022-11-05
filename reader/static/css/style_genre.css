@@ -160,8 +160,8 @@
 .main {
   background: linear-gradient(
     to bottom right,
-    #ffffff,
-    #FFEFBA
+    #fafafa,
+    #fafafa
   );
   display: flex;
   flex-direction: column;
