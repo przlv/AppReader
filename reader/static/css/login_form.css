@@ -1,3 +1,8 @@
+
+
+/* Please ❤ this if you like it! */
+
+
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
 
 .logform{
@@ -41,7 +46,7 @@ h6 span{
   display: block;
 }
 .full-height{
-  min-height: 85vh;
+  min-height: 100vh;
 }
 [type="checkbox"]:checked,
 [type="checkbox"]:not(:checked){
