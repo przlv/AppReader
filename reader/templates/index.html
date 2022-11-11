@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
     <div class="container mx-auto mt-4">
   <div class="row justify-content-center">
@@ -38,6 +37,17 @@
 {% endfor %}
   </div>
    </div>
+     <!-- Search Box-->
+  <div class="searchBox">
+
+   <input class="searchInput"type="text" name="" placeholder="Search">
+   <button class="searchButton" href="#">
+       <i class="material-icons">
+           Search
+       </i>
+   </button>
+</div>
+
 
     {% for page_num in books.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
       {% if page_num %}
