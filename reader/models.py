@@ -44,8 +44,8 @@ class Book(db.Model):
     weight = db.Column(INTEGER)
     page_count = db.Column(INTEGER)
     price_type = db.Column(BOOLEAN)
-    library_text = db.Column(db.String(1000), nullable=False)
-    affinity = db.Column(db.String(250), nullable=False)
+    library_text = db.Column(db.String(1000))
+    affinity = db.Column(db.String(250))
     count = db.Column(INTEGER)
     #initialization of Foreign Keys 
     author_id = db.Column(INTEGER , nullable=False)
@@ -163,7 +163,7 @@ class Type(db.Model):
     name = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
-        return f'<Publish {self.name}>'
+        return f'<Type {self.name}>'
 
 @dataclass # EdLevel Table
 class Level(db.Model):
