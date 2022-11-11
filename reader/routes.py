@@ -1,7 +1,7 @@
 import os, secrets
 from reader import app, db
 from reader.models import Book
-from flask import render_template, send_from_directory, request, flash, url_for, redirect, jsonify
+from flask import render_template, render_template_string, send_from_directory, request, flash, url_for, redirect, jsonify
 from PIL import Image
 from reader.forms import BookForm, UpdateBook
 from sqlalchemy.exc import IntegrityError
@@ -126,7 +126,20 @@ def authors():
 def profile():
     return render_template('profile.html')
 
-#test
 @app.route('/about/')
 def about():
     return render_template('about.html')
+
+@app.route('/log_in', methods=['GET', 'POST'])
+def log_in():
+    if request.method == 'POST':
+        login = request.form.get('logemail')
+        passwd = request.form.get('logpass')
+    return render_template_string('<h2>Пошел нахуй, такого нет пользователя</h2>')
+
+@app.route('/reg_in', methods=['GET', 'POST'])
+def reg_in():
+    if request.method == 'POST':
+        login = request.form.get('logemail')
+        passwd = request.form.get('logpass')
+    return render_template_string('<h2>Пошел нахуй, хуй тебе а не регистрация</h2>')
