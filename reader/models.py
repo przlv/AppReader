@@ -63,12 +63,14 @@ class Author(db.Model):
     first_name: str
     surname: str
     last_name: str
-    
+    cover : str
+
     #initialization of the author database fields 
     author_id = db.Column(INTEGER, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     surname = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
+    cover = db.Column(db.String(100), nullable=False, default='default.jpg')
 
     def __repr__(self):
         return f'<Author {self.first_name} {self.surname} {self.last_name}>'
