@@ -1,0 +1,18 @@
+.col-md-4 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+}
+
+.card {
+    margin: 1rem;
+}
+
+.card {
+    background: #fafafa;
+    border: 3px solid #b0d1e7;
+    color: #0099ff;
+    margin-bottom: 2rem;
+}
