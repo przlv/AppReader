@@ -16,3 +16,8 @@
     color: #0099ff;
     margin-bottom: 2rem;
 }
+
+.card-img {
+    width: 300px;
+    height: 300px;
+}
