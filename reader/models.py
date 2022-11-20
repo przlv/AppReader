@@ -11,7 +11,6 @@ class Book(db.Model):
     cover: str
     rating: int
     description: str
-    notes: str
     created_at : str
     year_publication: date
     price: float
@@ -35,7 +34,6 @@ class Book(db.Model):
     rating = db.Column(FLOAT)
     cover = db.Column(db.String(100), nullable=False, default='default.jpg')
     description = db.Column(db.String(1000))
-    notes = db.Column(db.String(1000))
     created_at = created_at = db.Column(db.DateTime(timezone=True),
                            server_default=func.now())
     year_publication = db.Column(DATE)
