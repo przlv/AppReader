@@ -132,7 +132,7 @@ def menu():
 def profile():
     id_user_current = 2
     # current_user = User.query.filter(User.user_id == 2)
-    current_user = User.query.get(2)
+    current_user = User.query.get(id_user_current)
     return render_template('profile.html', user = current_user)
 
 #test

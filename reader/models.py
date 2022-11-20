@@ -95,7 +95,7 @@ class Delivery(db.Model):
     description: str
     weight: int
     #Foreign Key 
-    client_id : int
+    user_id : int
     
     #initialization of the Delivery database fields 
     delivery_id = db.Column(INTEGER, primary_key=True)
@@ -104,7 +104,7 @@ class Delivery(db.Model):
     description = db.Column(db.String(500), nullable=False)
     weight = db.Column(INTEGER, nullable=False)
     #initialization of Foreign Key 
-    client_id = db.Column(INTEGER, nullable=False)
+    user_id = db.Column(INTEGER, nullable=False)
 
     def __repr__(self):
         return f'<Delivery {self. delivery_id} {self.date}>'
