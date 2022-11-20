@@ -4,39 +4,23 @@ const slides = [
 {
   title: "",
   subtitle: "",
-  description: "Frontend-разработчики",
+  description: "Full-stack разработчик",
   image:
-  "../uploads/slide (1).jpg" },
+  "../uploads/vlad.jpg" },
 
 {
   title: "",
   subtitle: "",
-  description: "Backend-разработчик",
+  description: "Front-end разработчик",
   image:
-  "../uploads/slide (2).jpg" },
+  "../uploads/grisha.jpg" },
 
 {
   title: "",
   subtitle: "",
-  description: "Backend-разработчик",
+  description: "Back-end разработчик",
   image:
-  "../uploads/slide (3).jpg" },
-
-{
-  title: "",
-  subtitle: "",
-  description: "Frontend-разработчики",
-  image:
-  "../uploads/slide (4).jpg" }];
-
-// {
-//   title: "",
-//   subtitle: "",
-//   description: "",
-//   image:
-//   "../uploads/slide (1).jpg" }];
-
-
+  "../uploads/andrey.jpg" }]
 
 function useTilt(active) {
   const ref = React.useRef(null);
