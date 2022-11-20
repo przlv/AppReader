@@ -15,6 +15,8 @@
     border: 3px solid #b0d1e7;
     color: #0099ff;
     margin-bottom: 2rem;
+    width: 250px;
+    height: 500px;
 }
 
 .card-img {
