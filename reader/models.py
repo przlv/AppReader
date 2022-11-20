@@ -31,7 +31,7 @@ class Book(db.Model):
 
     #initialization of the book database fields 
     book_id = db.Column(INTEGER, primary_key=True) 
-    title = db.Column(INTEGER, unique=True, nullable=False)
+    title = db.Column(db.String(100), unique=True, nullable=False)
     rating = db.Column(FLOAT)
     cover = db.Column(db.String(100), nullable=False, default='default.jpg')
     description = db.Column(db.String(1000))
