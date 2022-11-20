@@ -8,7 +8,9 @@ from sqlalchemy.exc import IntegrityError
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+   bookss = Book.query.order_by(Book.title.desc()).paginate()
+   return render_template('index.html', books_list = bookss)
+
 
 @app.route('/uploads/<filename>')
 def send_file(filename):
@@ -108,7 +110,7 @@ def account():
 
 # @app.post('/<int:book_id>/delete/')
 # def delete(book_id):
-#     book = Book.query.get_or_404(book_id)
+#     book = Book.query.get_or_404(book_id)authorss
 #     db.session.delete(book)
 #     db.session.commit()
 #     return redirect(url_for('index'))    
