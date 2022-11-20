@@ -57,7 +57,7 @@
     border-radius: 35px;
   }
   
-  .solution_cards_box .solution_card:hover .solu_description button {
+  .solution_cards_box .solution_card:hover .solu_description a {
     background: #fff !important;
     color: #309df0;
   }
@@ -77,7 +77,7 @@
     margin-bottom: 15px;
   }
   
-  .solution_card .solu_description button {
+  .solution_card .solu_description a {
     border: 0;
     border-radius: 15px;
     background: linear-gradient(

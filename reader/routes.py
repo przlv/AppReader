@@ -1,6 +1,6 @@
 import os, secrets
 from reader import app, db
-from reader.models import Book, Author
+from reader.models import *
 from flask import render_template, send_from_directory, request, flash, url_for, redirect, jsonify
 from PIL import Image
 from reader.forms import BookForm, UpdateBook
@@ -125,9 +125,16 @@ def authors():
     authorss = Author.query.order_by(Author.surname.desc()).paginate()
     return render_template('authors.html', authors_list = authorss)
 
+@app.route('/menu/')
+def menu():
+    return render_template('menu.html')
+
 @app.route('/profile/')
 def profile():
-    return render_template('profile.html')
+    id_user_current = 2
+    # current_user = User.query.filter(User.user_id == 2)
+    current_user = User.query.get(2)
+    return render_template('profile.html', user = current_user)
 
 #test
 @app.route('/about/')
