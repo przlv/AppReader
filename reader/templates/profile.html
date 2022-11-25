@@ -12,30 +12,30 @@
             </span></div>
         </div>
         <div class="col-md-5 border-right">
-            <div class="p-3 py-5">
+            <form class="p-3 py-5" method="POST" action="" name="" enctype="multipart/form-data">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4 class="text-right">Настройки профиля</h4>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Имя</label><input type="text" class="form-control" placeholder="{{ user.first_name }}" value=""></div>
-                    <div class="col-md-6"><label class="labels">Фамилия</label><input type="text" class="form-control" value="" placeholder="{{ user.surname }}"></div>
-                    <div class="col-md-6"><label class="labels">Отчество</label><input type="text" class="form-control" placeholder="{{ user.last_name }}" value=""></div>
+                    <div class="col-md-6"><label class="labels">Имя</label><input name="first_name" type="text" class="form-control" value="{{ user.first_name }}"></div>
+                    <div class="col-md-6"><label class="labels">Фамилия</label><input name="surname" type="text" class="form-control" value="{{ user.surname }}"></div>
+                    <div class="col-md-6"><label class="labels">Отчество</label><input name="last_name" type="text" class="form-control" value="{{ user.last_name }}" ></div>
                 </div>
                 <div class="row mt-3">
                     
-                    <div class="col-md-12"><label class="labels">Мобильный телефон</label><input type="text" class="form-control" placeholder="{{ user.phone }}" value=""></div>
-                    <div class="col-md-12"><label class="labels">Последняя активность</label><input type="datetime" class="form-control" placeholder="{{ user.last_logon }}" value="" disabled></div>
-                    <div class="col-md-12"><label class="labels">Почтовый индекс</label><input type="text" class="form-control" placeholder="{{ user.zipcode }}" value=""></div>
-                    <div class="col-md-12"><label class="labels">Адрес</label><input type="text" class="form-control" placeholder="{{ user.address }}" value=""></div>
-                    <div class="col-md-12"><label class="labels">Почта</label><input type="email" class="form-control" placeholder="{{ user.email }}" value="" disabled></div>
-                    <div class="col-md-12"><label class="labels">Логин</label><input type="text" class="form-control" placeholder="{{ user.login }}" value=""></div>
-                    <div class="col-md-12"><label class="labels">Пароль</label><input type="password" class="form-control" placeholder="··············" value=""></div>
+                    <div class="col-md-12"><label class="labels">Мобильный телефон</label><input name="phone" type="text" class="form-control" value="{{ user.phone }}"></div>
+                    <div class="col-md-12"><label class="labels">Последняя активность</label><input type="datetime" class="form-control" value="{{ user.last_logon }}" disabled></div>
+                    <div class="col-md-12"><label class="labels">Почтовый индекс</label><input name="zipcode" type="text" class="form-control" value="{{ user.zipcode }}"></div>
+                    <div class="col-md-12"><label class="labels">Адрес</label><input name="address" type="text" class="form-control" value="{{ user.address }}"></div>
+                    <div class="col-md-12"><label class="labels">Почта</label><input type="email" class="form-control" value="{{ user.email }}" disabled></div>
+                    <div class="col-md-12"><label class="labels">Логин</label><input name="login" type="text" class="form-control" value="{{ user.login }}" ></div>
+                    <div class="col-md-12"><label class="labels">Пароль</label><input name="password" type="password" class="form-control" value="{{ user.password }}"></div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-6"><label class="labels">Пользователь</label><input type="text" class="form-control" placeholder="{{ user.UserType }}" value="" disabled></div>
+                    <div class="col-md-6"><label class="labels">Пользователь</label><input name="" type="text" class="form-control" value="{{ user.UserType }}" value="" disabled></div>
                 </div>
-                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Сохранить изменения</button></div>
-            </div>
+                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Сохранить изменения</button></div>
+            </form>
         </div>
         {% if user.UserType in 'Admin' %}
         <div class="col-md-4">

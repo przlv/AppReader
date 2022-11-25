@@ -3,7 +3,7 @@ from reader import app, db
 from reader.models import *
 from flask import render_template, send_from_directory, request, flash, url_for, redirect, jsonify
 from PIL import Image
-from reader.forms import BookForm, UpdateBook
+from reader.forms import *
 from sqlalchemy.exc import IntegrityError
 from random import randrange
 
@@ -129,11 +129,25 @@ def authors():
 def menu():
     return render_template('menu.html')
 
-@app.route('/profile/')
+@app.route('/profile/', methods=['GET', 'POST'])
 def profile():
     id_user_current = 2
-    current_user = User.query.get(id_user_current)
-    return render_template('profile.html', user = current_user)
+    user = User.query.get(id_user_current)
+    if request.method == 'POST':
+        form = UpdateUser(request.form)
+        if form.validate_on_submit:
+            user.first_name = form.first_name.data
+            user.surname = form.surname.data
+            user.last_name = form.last_name.data
+            user.phone = form.phone.data
+            user.address = form.address.data
+            user.login = form.login.data
+            user.password = form.password.data
+            try:
+                db.session.commit()
+            except:
+                db.session.rollback()
+    return render_template('profile.html', user = user)
 
 @app.route('/delivery/')
 def delivery():
@@ -143,7 +157,6 @@ def delivery():
     card_code = randrange(1000, 9999)
     return render_template('delivery.html', user = current_user, user_delivery=current_delivery.items, card_code = card_code)
 
-#test
 @app.route('/about/')
 def about():
     return render_template('about.html')

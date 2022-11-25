@@ -43,3 +43,22 @@ class UpdateBook(FlaskForm):
                                 validators=[DataRequired(),
                                             Length(max=500)])
     submit = SubmitField('Обновить')
+
+class UpdateUser(FlaskForm):
+    first_name = StringField('Имя', validators=[DataRequired(),
+                                             Length(min=1, max=50)])
+    surname = StringField('Фамилия', validators=[DataRequired(),
+                                             Length(min=1, max=50)])
+    last_name = StringField('Отчество', validators=[DataRequired(),
+                                             Length(min=1, max=50)])
+    phone = StringField('Мобильный телефон', validators=[DataRequired(),
+                                             Length(min=10, max=15)])
+    zipcode = StringField('Почтовый индекс', validators=[DataRequired(),
+                                             Length(min=1, max=10)])
+    address = StringField('Адрес', validators=[DataRequired(),
+                                             Length(min=1, max=50)])
+    login = StringField('Логин', validators=[DataRequired(),
+                                             Length(min=1, max=50)])
+    password = StringField('Пароль', validators=[DataRequired(),
+                                             Length(min=1, max=50)])
+    submit = SubmitField('Обновить')
