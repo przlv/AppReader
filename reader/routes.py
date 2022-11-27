@@ -176,7 +176,14 @@ def delivery():
     card_code = randrange(1000, 9999)
     return render_template('delivery.html', user = current_user, user_delivery=current_delivery.items, card_code = card_code)
 
-#test
+@app.route('/preference/')
+def preference():
+    id_user_current = 2
+    current_user = User.query.get(id_user_current)
+    current_delivery = Delivery.query.filter(Delivery.user_id == id_user_current).paginate()
+    card_code = randrange(1000, 9999)
+    return render_template('preference.html', user = current_user, user_delivery=current_delivery.items, card_code = card_code)
+
 @app.route('/about/')
 def about():
     return render_template('about.html')
