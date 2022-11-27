@@ -44,7 +44,7 @@ class UpdateBook(FlaskForm):
                                             Length(max=500)])
     submit = SubmitField('Обновить')
 
-class UpdateUser(FlaskForm):
+class UserForm(FlaskForm):
     first_name = StringField('Имя', validators=[DataRequired(),
                                              Length(min=1, max=50)])
     surname = StringField('Фамилия', validators=[DataRequired(),
