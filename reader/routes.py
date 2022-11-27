@@ -33,18 +33,18 @@ def account():
     books = Book.query.filter(Book.rating > 4).paginate(page=page, per_page=6)
     return render_template('account.html', books=books)      
 
-# def save_picture(cover):
-#     random_hex = secrets.token_hex(8)
-#     _, f_ext = os.path.splitext(cover.filename)
-#     picture_fn = random_hex + f_ext
-#     picture_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], picture_fn)
+def save_picture(cover):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(cover.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], picture_fn)
 
-#     output_size = (220, 340)
-#     i = Image.open(cover)
-#     i.thumbnail(output_size)
-#     i.save(picture_path)
+    output_size = (300, 300)
+    i = Image.open(cover)
+    i.thumbnail(output_size)
+    i.save(picture_path)
 
-#     return picture_fn
+    return picture_fn
 
 # @app.route('/create/', methods=('GET', 'POST'))
 # def create():
@@ -165,7 +165,50 @@ def preference():
     card_code = randrange(1000, 9999)
     return render_template('preference.html', user = current_user, user_delivery=current_delivery.items, card_code = card_code)
 
+@app.route('/admin-sklad/')
+def admin_sklad():
+    books = Book.query.order_by(Book.title.desc()).paginate()
+    return render_template('admin_sklad.html', books=books.items)
+
 
 @app.route('/about/')
 def about():
     return render_template('about.html')
+
+@app.route('/admin-add-book/', methods=['GET', 'POST'])
+def admin_add_book():
+    if request.method == 'POST':
+        formbook = BookForm(request.form)
+        # if formbook.cover.data:
+        #     formbook.cover.data = save_picture(formbook.cover.data)
+        # else:
+        #     formbook.cover.data ='default.jpg'
+        
+        new_book = Book(
+            # book_id= formbook.book_id.data,
+            title= formbook.title.data,
+            cover= 'default.jpg',
+            rating= formbook.rating.data,
+            description= formbook.description.data,
+            created_at = formbook.created_at.data,
+            year_publication= formbook.year_publication.data,
+            price= formbook.price.data,
+            sale= formbook.sale.data,
+            weight= formbook.weight.data,
+            page_count= formbook.page_count.data,
+            price_type= formbook.price_type.data,
+            library_text= formbook.library_text.data,
+            affinity= formbook.affinity.data,
+            count= formbook.count.data,
+            # author_id= formbook.author_id.data,
+            # genre= formbook.genre.data,
+            # publish_id = formbook.publish_id.data,
+            # type_id = formbook.type_id.data,
+            # level_id= formbook.level_id.data      
+        )
+        db.session.add(new_book)
+        db.session.commit()
+        return redirect(url_for('admin_sklad'))
+
+    elif request.method == 'GET':
+        return render_template('admin-add-book.html')
