@@ -50,9 +50,9 @@ def account():
                     db.session.commit()
                 except:
                     db.session.rollback()
-                return render_template('profile.html', user = user)
+                return render_template('menu.html', user = user)
             else:
-                return render_template('profile.html',error = result_valid[0]) 
+                return render_template('account.html', error='Неправильный пароль или логин') 
 
 # @app.route('/create/', methods=('GET', 'POST'))
 # def create():
@@ -138,7 +138,7 @@ def menu():
     return render_template('menu.html')
 
 @app.route('/profile/', methods=['GET', 'POST'])
-def profile(id_user_current ):
+def profile(id_user_current):
     #id_user_current = 2
     user = User.query.get(id_user_current)
     if request.method == 'POST':

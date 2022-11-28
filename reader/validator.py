@@ -8,9 +8,10 @@ def Account_validation( Login , Password):
     for user in Users.items:
         if Login == user.login:
            key = user.user_id
+           break
     
     if key == 0:
-        message = "пользователя не существует"
+        message = "Пользователя не существует"
         succses = False
         return [message,succses]
     
