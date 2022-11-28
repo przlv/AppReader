@@ -6,6 +6,8 @@ from PIL import Image
 from reader.forms import *
 from sqlalchemy.exc import IntegrityError
 from random import randrange
+import datetime
+# from werkzeug import secure_filename
 
 @app.route('/')
 def index():
@@ -32,19 +34,6 @@ def account():
     page = request.args.get('page', 1, type=int)
     books = Book.query.filter(Book.rating > 4).paginate(page=page, per_page=6)
     return render_template('account.html', books=books)      
-
-def save_picture(cover):
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(cover.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], picture_fn)
-
-    output_size = (300, 300)
-    i = Image.open(cover)
-    i.thumbnail(output_size)
-    i.save(picture_path)
-
-    return picture_fn
 
 # @app.route('/create/', methods=('GET', 'POST'))
 # def create():
@@ -179,18 +168,20 @@ def about():
 def admin_add_book():
     if request.method == 'POST':
         formbook = BookForm(request.form)
-        # if formbook.cover.data:
-        #     formbook.cover.data = save_picture(formbook.cover.data)
-        # else:
-        #     formbook.cover.data ='default.jpg'
-        
+        if request.files['cover']:
+            file = request.files['cover']
+            filepath = ''
+            filepath = '/'.join(['reader/uploads',file.filename])
+            file.save(filepath)
+            cover = file.filename
+        else:
+            cover = 'default.jpg'
         new_book = Book(
-            # book_id= formbook.book_id.data,
             title= formbook.title.data,
-            cover= 'default.jpg',
+            cover= cover,
             rating= formbook.rating.data,
             description= formbook.description.data,
-            created_at = formbook.created_at.data,
+            created_at = datetime.datetime.today(),
             year_publication= formbook.year_publication.data,
             price= formbook.price.data,
             sale= formbook.sale.data,
@@ -200,11 +191,11 @@ def admin_add_book():
             library_text= formbook.library_text.data,
             affinity= formbook.affinity.data,
             count= formbook.count.data,
-            # author_id= formbook.author_id.data,
-            # genre= formbook.genre.data,
-            # publish_id = formbook.publish_id.data,
-            # type_id = formbook.type_id.data,
-            # level_id= formbook.level_id.data      
+            author_id= formbook.author_id.data,
+            genre= formbook.genre.data,
+            publish_id = formbook.publish_id.data,
+            type_id = 1,
+            level_id= formbook.level_id.data      
         )
         db.session.add(new_book)
         db.session.commit()
