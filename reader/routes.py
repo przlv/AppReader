@@ -52,7 +52,7 @@ def account():
                     db.session.rollback()
                 return render_template('menu.html', user = user)
             else:
-                return render_template('account.html', error='Неправильный пароль или логин') 
+                return render_template('account.html', error=result_valid[0]) 
 
 # @app.route('/create/', methods=('GET', 'POST'))
 # def create():

@@ -18,7 +18,7 @@ def Account_validation( Login , Password):
     Users = User.query.where(User.user_id == key).paginate()
     user = Users.items
     if Password != user[0].password:
-        message = "неправильный пароль"
+        message = "Неправильный пароль"
         succses = False
         return [message,succses]
     else:
