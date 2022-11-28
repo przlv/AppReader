@@ -122,6 +122,7 @@ class User(db.Model):
     password: str
     RegDate: DateTime
     UserType : str
+    Auth : str
     
     #initialization of the Client database fields 
     user_id = db.Column(INTEGER, primary_key=True)
@@ -137,6 +138,7 @@ class User(db.Model):
     password = db.Column(db.String(50), nullable=False)
     RegDate = db.Column(DATETIME, nullable=False)
     UserType = db.Column(db.String(10), nullable=False)
+    Auth = db.Column(db.String(1), nullable=False)
     
     def __repr__(self):
         return f'<Client {self.user_id}{self.first_name}>'

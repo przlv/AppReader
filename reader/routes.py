@@ -4,6 +4,7 @@ from reader.models import *
 from flask import render_template, send_from_directory, request, flash, url_for, redirect, jsonify
 from PIL import Image
 from reader.forms import *
+from reader.validator import *
 from sqlalchemy.exc import IntegrityError
 from random import randrange
 import datetime
@@ -13,6 +14,7 @@ import datetime
 def index():
    bookss = Book.query.order_by(Book.title.desc()).paginate()
    return render_template('index.html', books_list = bookss)
+
 
 @app.route('/uploads/<filename>')
 def send_file(filename):
@@ -29,11 +31,28 @@ def genre():
     books = Book.query.filter(Book.genre == 'триллер').paginate(page=page, per_page=6)
     return render_template('genre.html', books=books)
 
-@app.route('/account/')
+@app.route('/account/', methods=('GET', 'POST'))
 def account():
-    page = request.args.get('page', 1, type=int)
-    books = Book.query.filter(Book.rating > 4).paginate(page=page, per_page=6)
-    return render_template('account.html', books=books)      
+    form = UserForm(request.form)
+    if request.method == "GET":
+        return render_template('account.html', form=form)
+    
+    if request.method == "POST":
+        if form.validate_on_submit:
+            Login = form.login.data
+            Password = form.password.data
+            result_valid = Account_validation(Login,Password)
+            
+            if result_valid[1] == True:
+                user = User.query.get(result_valid[0])
+                user.Auth = 1
+                try:
+                    db.session.commit()
+                except:
+                    db.session.rollback()
+                return render_template('profile.html', user = user)
+            else:
+                return render_template('profile.html',error = result_valid[0]) 
 
 # @app.route('/create/', methods=('GET', 'POST'))
 # def create():
@@ -119,11 +138,11 @@ def menu():
     return render_template('menu.html')
 
 @app.route('/profile/', methods=['GET', 'POST'])
-def profile():
-    id_user_current = 2
+def profile(id_user_current ):
+    #id_user_current = 2
     user = User.query.get(id_user_current)
     if request.method == 'POST':
-        form = UpdateUser(request.form)
+        form = UserForm(request.form)
         if form.validate_on_submit:
             user.first_name = form.first_name.data
             user.surname = form.surname.data
@@ -158,7 +177,6 @@ def preference():
 def admin_sklad():
     books = Book.query.order_by(Book.title.desc()).paginate()
     return render_template('admin_sklad.html', books=books.items)
-
 
 @app.route('/about/')
 def about():
