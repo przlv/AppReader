@@ -273,3 +273,13 @@ def editbook(book_id):
         book.level_id= formbook.level_id.data
         db.session.commit()
         return redirect(url_for('admin_sklad'))
+
+@app.route('/admin-users/')
+def admin_users():
+    users = User.query.order_by(User.first_name.desc()).paginate()
+    return render_template('admin_user_control.html', users=users.items)
+
+@app.route('/admin-authors/')
+def admin_authors():
+    authors = Author.query.order_by(Author.first_name.desc()).paginate()
+    return render_template('admin_authors_control.html', authors=authors.items)
