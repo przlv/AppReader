@@ -8,7 +8,8 @@ from reader.validator import *
 from sqlalchemy.exc import IntegrityError
 from random import randrange
 import datetime
-# from werkzeug import secure_filename
+
+current_user = -1
 
 @app.route('/')
 def index():
@@ -33,9 +34,13 @@ def genre():
 
 @app.route('/account/', methods=('GET', 'POST'))
 def account():
+    global current_user
     form = UserForm(request.form)
     if request.method == "GET":
-        return render_template('account.html', form=form)
+        if current_user != -1:
+            return render_template('menu.html')
+        else:
+            return render_template('account.html', form=form)
     
     if request.method == "POST":
         if form.validate_on_submit:
@@ -50,7 +55,8 @@ def account():
                     db.session.commit()
                 except:
                     db.session.rollback()
-                return render_template('menu.html', user = user)
+                current_user = user.user_id
+                return render_template('menu.html')
             else:
                 return render_template('account.html', error=result_valid[0]) 
 
@@ -119,9 +125,9 @@ def account():
 # @app.post('/<int:book_id>/delete/')
 # def delete(book_id):
 #     book = Book.query.get_or_404(book_id)authorss
-#     db.session.delete(book)
-#     db.session.commit()
-#     return redirect(url_for('index'))    
+    # db.session.delete(book)
+    # db.session.commit()
+    # return redirect(url_for('index'))    
 
 # @app.route('/export/')
 # def data():
@@ -137,10 +143,9 @@ def authors():
 def menu():
     return render_template('menu.html')
 
-@app.route('/profile/', methods=['GET', 'POST'])
-def profile(id_user_current):
-    #id_user_current = 2
-    user = User.query.get(id_user_current)
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    user = User.query.get(current_user)
     if request.method == 'POST':
         form = UserForm(request.form)
         if form.validate_on_submit:
@@ -159,19 +164,17 @@ def profile(id_user_current):
 
 @app.route('/delivery/')
 def delivery():
-    id_user_current = 2
-    current_user = User.query.get(id_user_current)
-    current_delivery = Delivery.query.filter(Delivery.user_id == id_user_current).paginate()
+    user = User.query.get(current_user)
+    current_delivery = Delivery.query.filter(Delivery.user_id == user.user_id).paginate()
     card_code = randrange(1000, 9999)
-    return render_template('delivery.html', user = current_user, user_delivery=current_delivery.items, card_code = card_code)
+    return render_template('delivery.html', user = user, user_delivery=current_delivery.items, card_code = card_code)
 
 @app.route('/preference/')
 def preference():
-    id_user_current = 2
-    current_user = User.query.get(id_user_current)
-    current_delivery = Delivery.query.filter(Delivery.user_id == id_user_current).paginate()
+    user = User.query.get(current_user)
+    current_delivery = Delivery.query.filter(Delivery.user_id == user.user_id).paginate()
     card_code = randrange(1000, 9999)
-    return render_template('preference.html', user = current_user, user_delivery=current_delivery.items, card_code = card_code)
+    return render_template('preference.html', user = user, user_delivery=current_delivery.items, card_code = card_code)
 
 @app.route('/admin-sklad/')
 def admin_sklad():
@@ -221,3 +224,52 @@ def admin_add_book():
 
     elif request.method == 'GET':
         return render_template('admin-add-book.html')
+
+@app.route('/exit/')
+def exit():
+    global current_user
+    current_user = -1
+    return render_template('account.html')
+
+@app.route('/deletebook/<int:book_id>')
+def deletebook(book_id):
+    book = Book.query.get_or_404(book_id)
+    db.session.delete(book)
+    db.session.commit()
+    return redirect(url_for('admin_sklad'))
+
+@app.route('/editbook/<int:book_id>', methods=['GET', 'POST'])
+def editbook(book_id):
+    book = Book.query.get_or_404(book_id)
+    if request.method == 'GET':
+        return render_template('admin-edit-book.html', book=book)
+    elif request.method == 'POST':
+        formbook = BookForm(request.form)
+        if request.files['cover']:
+            file = request.files['cover']
+            filepath = ''
+            filepath = '/'.join(['reader/uploads',file.filename])
+            file.save(filepath)
+            cover = file.filename
+        else:
+            cover = book.cover
+        book.title= formbook.title.data
+        book.cover= cover
+        book.rating= formbook.rating.data
+        book.description= formbook.description.data
+        book.year_publication= formbook.year_publication.data
+        book.price= formbook.price.data
+        # book.sale= formbook.sale.data
+        book.weight= formbook.weight.data
+        book.page_count= formbook.page_count.data
+        # book.price_type= formbook.price_type.data
+        book.library_text= formbook.library_text.data
+        book.affinity= formbook.affinity.data
+        book.count= formbook.count.data
+        book.author_id= formbook.author_id.data
+        book.genre= formbook.genre.data
+        book.publish_id = formbook.publish_id.data
+        book.type_id = 1
+        book.level_id= formbook.level_id.data
+        db.session.commit()
+        return redirect(url_for('admin_sklad'))

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link href="{{ url_for('static', filename='css/profile_user.css') }}" rel="stylesheet">
+
+<div class="edit_book" style="padding-left: 20px;padding-right: 20px;max-width: 800px;margin-left: auto;margin-right: auto;">
+    <form class="p-3 py-5" method="POST" action="" enctype="multipart/form-data">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="text-right">Изменение книги</h4>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-6"><label class="labels">Название</label><input name="title" type="text" class="form-control" value="{{ book.title }}"></div>
+            <div class="col-md-6"><label class="labels">Рейтинг</label><input name="rating" type="text" class="form-control" value="{{ book.rating }}" ></div>
+            <div class="col-md-6"><label class="labels">Изображение</label><input name="cover" type="file" class="form-check" value=""></div>
+            <div class="col-md-6"><label class="labels">Описание</label><input name="description" type="text" class="form-control" value="{{ book.description }}"></div>
+            <div class="col-md-6"><label class="labels">Год публикации</label><input name="year_publication" type="date" class="form-control" value="{{ book.year_publication }}" ></div>
+            <div class="col-md-6"><label class="labels">Цена</label><input name="price" type="text" class="form-control" value="{{ book.price }}"></div>
+            <!-- <div class="col-md-6"><label class="labels">Скидка Да/нет</label><input name="sale" type="checkbox" class="form-check" value="{{ book.sale }}"></div> -->
+            <div class="col-md-6"><label class="labels">Вес в г.</label><input name="weight" type="text" class="form-control" value="{{ book.weight }}" ></div>
+            <div class="col-md-6"><label class="labels">Количество страниц</label><input name="page_count" type="text" class="form-control" value="{{ book.page_count }}"></div>
+            <!-- <div class="col-md-6"><label class="labels">Доступ Платно/бесплатно</label><input name="price_type" type="checkbox" class="form-check" value="{{ book.price_type }}"></div> -->
+            <div class="col-md-6"><label class="labels">Библио-текст</label><input name="library_text" type="text" class="form-control" value="{{ book.library_text }}" ></div>
+            <div class="col-md-6"><label class="labels">Аффиляция</label><input name="affinity" type="text" class="form-control" value="{{ book.affinity }}" ></div>
+            <div class="col-md-6"><label class="labels">Количество книг на складе</label><input name="count" type="text" class="form-control" value="{{ book.count }}" ></div>
+            <div class="col-md-6"><label class="labels">ID Автора</label><input name="author_id" type="text" class="form-control" value="{{ book.author_id }}" ></div>
+            <div class="col-md-6"><label class="labels">ID Жанра</label><input name="genre" type="text" class="form-control" value="{{ book.genre }}" ></div>
+            <div class="col-md-6"><label class="labels">ID Издательства</label><input name="publish_id" type="text" class="form-control" value="{{ book.publish_id }}" ></div>
+            <div class="col-md-6"><label class="labels">ID Специализации</label><input name="level_id" type="text" class="form-control" value="{{ book.level_id }}" ></div>
+        </div>
+        <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Сохранить изменения</button></div>
+    </form>
+</div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react/16.11.0/umd/react.development.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.development.js'></script>
+{% endblock %}
