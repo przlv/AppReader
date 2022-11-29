@@ -2,18 +2,18 @@
 
 
 {% block content %}
-
-<!— Search Box-->
-<div id="wrap">
-   <form action="" autocomplete="on">
-   <input id="search" name="search" type="text" placeholder="Что будем искать ?"><input id="search_submit" value="Rechercher" type="submit">
-   </form>
- </div>
-
 <link href="{{ url_for('static', filename='css/authors.css') }}" rel="stylesheet">
+
+
 <div class="container mx-auto mt-4">
    <!-- <div class="row"> -->
        <div class="col-md-4">
+        <!--Search Box-->
+            <div id="wrap">
+                <form action="" autocomplete="on">
+                    <input id="search" name="search" type="text" placeholder="Что будем искать ?"><input id="search_submit" value="Rechercher" type="submit">
+                </form>
+            </div>
            {% for book in books_list.items %}
            <div class="card" style="width: 18rem;">
                <img src="{{ url_for('send_file', filename=book.cover) }}" class="card-img" >
