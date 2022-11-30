@@ -27,6 +27,14 @@ class BookForm(FlaskForm):
     level_id = IntegerField('ID Специализации', validators=[DataRequired()])
     submit = SubmitField('Добавить')
 
+class AuthorForm(FlaskForm):
+   author_id = IntegerField('ID автора', validators=[DataRequired()])
+   first_name = StringField('Имя', validators=[DataRequired(), Length(min=5, max=50)])
+   surname = StringField('Фамилия', validators=[DataRequired(), Length(min=5, max=50)])
+   last_name = StringField('Название', validators=[DataRequired(), Length(min=5, max=50)])
+   cover = FileField('Фотография автора', validators=[FileAllowed(['jpg', 'png'])])
+   submit = SubmitField('Добавить')
+
 class UpdateBook(FlaskForm):
     title = StringField('Название', validators=[DataRequired(),
                                              Length(min=5, max=100)])
