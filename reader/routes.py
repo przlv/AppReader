@@ -273,3 +273,23 @@ def editbook(book_id):
         book.level_id= formbook.level_id.data
         db.session.commit()
         return redirect(url_for('admin_sklad'))
+
+@app.route('/<int:sort_id>')
+def sort(sort_id):
+   bookss = Book.query.order_by(Book.price.desc()).paginate()
+   if sort_id == 1:
+      bookss = Book.query.order_by(Book.price.asc()).paginate()
+   if sort_id == 2:
+      bookss = Book.query.order_by(Book.price.desc()).paginate()
+   if sort_id == 3:
+      bookss = Book.query.order_by(Book.rating.asc()).paginate()
+   if sort_id == 4:
+      bookss = Book.query.order_by(Book.rating.desc()).paginate()
+   if sort_id == 5:
+      bookss = Book.query.order_by(Book.title.asc()).paginate()
+   if sort_id == 6:
+      bookss = Book.query.order_by(Book.title.desc()).paginate()
+   if sort_id == 7:
+      bookss = Book.query.order_by(Book.year_publication.desc()).paginate()
+
+   return render_template('index.html', books_list = bookss)
