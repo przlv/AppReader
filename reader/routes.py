@@ -8,6 +8,7 @@ from reader.validator import *
 from sqlalchemy.exc import IntegrityError
 from random import randrange
 import datetime
+import json
 
 current_user = -1
 
@@ -377,4 +378,26 @@ def viewbook(book_id):
                             rating_int = int(book.rating),
                             publish = publish.items[0].name,
                             type = type.items[0].name,
+                            user_id = current_user,
                             )
+
+@app.route('/buybook', methods= ['POST'])
+def buybook():
+    jsdata = request.form['javascript_data']
+    book_id = int(jsdata)
+    book = Book.query.get_or_404(book_id)
+
+    form = DeliveryForm()
+    new_buy = Delivery(
+        date= datetime.datetime.today(),
+        count= 1,
+        description= book.title,
+        weight= book.weight,
+        user_id=current_user,
+        price=book.price,
+    )
+    db.session.add(new_buy)
+    book.count -= 1
+    db.session.commit()
+
+    return {'ok':1}
