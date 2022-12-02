@@ -27,6 +27,14 @@ class BookForm(FlaskForm):
     level_id = IntegerField('ID Специализации', validators=[DataRequired()])
     submit = SubmitField('Добавить')
 
+class AuthorForm(FlaskForm):
+   author_id = IntegerField('ID автора', validators=[DataRequired()])
+   first_name = StringField('Имя', validators=[DataRequired(), Length(min=5, max=50)])
+   surname = StringField('Фамилия', validators=[DataRequired(), Length(min=5, max=50)])
+   last_name = StringField('Название', validators=[DataRequired(), Length(min=5, max=50)])
+   cover = FileField('Фотография автора', validators=[FileAllowed(['jpg', 'png'])])
+   submit = SubmitField('Добавить')
+
 class UpdateBook(FlaskForm):
     title = StringField('Название', validators=[DataRequired(),
                                              Length(min=5, max=100)])
@@ -61,4 +69,15 @@ class UserForm(FlaskForm):
                                              Length(min=1, max=50)])
     password = StringField('Пароль', validators=[DataRequired(),
                                              Length(min=1, max=50)])
+    UserType = StringField('Тип пользователя', validators=[DataRequired(),
+                                             Length(min=1, max=50)])
     submit = SubmitField('Обновить')
+
+class DeliveryForm(FlaskForm):
+    delivery_id = IntegerField('ID книги', validators=[DataRequired()])
+    date = DateField('Дата добавления', format='%Y-%m-%d')
+    count = IntegerField('Количество книг', validators=[DataRequired()])
+    weight = IntegerField('Вес', validators=[DataRequired()])
+    description = StringField('Описание', validators=[DataRequired(), Length(min=5, max=1000)])
+    price = IntegerField('Цена', validators=[DataRequired()])
+    submit = SubmitField('Добавить')

@@ -24,10 +24,11 @@
             </div>
            {% for book in books_list.items %}
            <div class="card" style="width: 18rem;">
-               <img src="{{ url_for('send_file', filename=book.cover) }}" class="card-img" >
+               <img src="{{ url_for('send_file', filename=book.cover) }}" class="card-img">
                <div class="card-body">
                    <h5 class="card-title">{{book.title}}</h5>
-                   <h6 class="card-subtitle mb-2 text-muted">{{book.description[:100]+'...'}}</h6>
+                   <h6 class="card-subtitle mb-2 text-muted">{{book.description[:40]+'...'}}</h6>
+                   <a href="{{ url_for('viewbook', book_id=book.book_id) }}" class="btn btn-info">Подробнее</a>
                </div>
            </div>
            {% endfor %}

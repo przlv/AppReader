@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link href="{{ url_for('static', filename='css/profile_user.css') }}" rel="stylesheet">
+
+<div class="edit_book" style="padding-left: 20px;padding-right: 20px;max-width: 800px;margin-left: auto;margin-right: auto;">
+    <form class="p-3 py-5" method="POST" action="" enctype="multipart/form-data">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="text-right">Изменение данных пользователя</h4>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-6"><label class="labels">Имя</label><input name="first_name" type="text" class="form-control" value="{{ user.first_name }}"></div>
+            <div class="col-md-6"><label class="labels">Фамилия</label><input name="surname" type="text" class="form-control" value="{{ user.surname }}" ></div>
+            <div class="col-md-6"><label class="labels">Отчество</label><input name="last_name" type="text" class="form-control" value="{{ user.last_name }}"></div>
+            <div class="col-md-6"><label class="labels">Телефон</label><input name="phone" type="text" class="form-control" value="{{ user.phone }}" ></div>
+            <div class="col-md-6"><label class="labels">Почтовый индекс</label><input name="zipcode" type="text" class="form-control" value="{{ user.zipcode }}"></div>
+            <div class="col-md-6"><label class="labels">Адрес</label><input name="address" type="text" class="form-control" value="{{ user.address }}" ></div>
+            <div class="col-md-6"><label class="labels">Логин</label><input name="login" type="text" class="form-control" value="{{ user.login }}" disabled></div>
+            <div class="col-md-6"><label class="labels">Пароль</label><input name="password" type="text" class="form-control" value="{{ user.password }}" disabled></div>
+            <div class="col-md-6"><label class="labels">Тип пользователя</label><input name="UserType" type="text" class="form-control" value="{{ user.UserType }}" ></div>
+        </div>
+        <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Сохранить изменения</button></div>
+    </form>
+</div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react/16.11.0/umd/react.development.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.development.js'></script>
+{% endblock %}

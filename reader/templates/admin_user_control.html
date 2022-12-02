@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link href="{{ url_for('static', filename='css/admin_sklad.css') }}" rel="stylesheet">
+
+<div class="container mt-5 px-2">
+    <div class="table-responsive">
+    <table class="table table-responsive table-borderless">
+        <thead>
+            <tr class="bg-light">
+                <th scope="col" width="2%"></th>
+            <th scope="col" width="3%">ID Пользователя</th>
+            <th scope="col" width="15%">ФИО</th>
+            <th scope="col" width="10%">Телефон</th>
+            <th scope="col" width="20%">Последняя активность</th>
+            <th scope="col" width="5%">Логин</th>
+            <th scope="col" width="5%">Пароль</th>
+            <th scope="col" class="text-end" width="15%"><span>Роль</span></th>
+            <th scope="col" width="1%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                <th scope="row"><input class="form-check-input" type="checkbox" style="position: static; margin-left: 0;"></th>
+                <td>{{ user.user_id }}</td>
+                <td>{{ user.first_name }} {{ user.surname }}</td>
+                <td><span class="ms-1">{{ user.phone }}</span></td>
+                <td>{{ user.last_logon }}</td>
+                <td>{{ user.login }}</td>
+                <td>{{ user.password }}</td>
+                <td>{{ user.UserType }}</td>
+                <td>
+                    <a class="fa fa-ellipsis-h  ms-2" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown1">
+                        <li class="dropdown-item"><a href="{{ url_for('edituser', user_id=user.user_id) }}" style="display: block;">Редактировать</a></li>
+                        <li class="dropdown-item"><a href="{{ url_for('deleteuser', user_id=user.user_id) }}" style="display: block;">Удалить</a></li>
+                    </ul>
+                </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+</div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react/16.11.0/umd/react.development.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.development.js'></script>
+{% endblock %}
