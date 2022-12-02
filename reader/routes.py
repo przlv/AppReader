@@ -8,9 +8,10 @@ from reader.validator import *
 from sqlalchemy.exc import IntegrityError
 from random import randrange
 import datetime
-import json
+from scripts import generate_quote
 
 current_user = -1
+app.jinja_env.globals.update(generate_quote=generate_quote)
 
 @app.route('/')
 def index():
