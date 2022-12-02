@@ -365,3 +365,16 @@ def admin_add_author():
 
     elif request.method == 'GET':
         return render_template('admin-add-author.html')
+
+@app.route('/viewbook/<int:book_id>')
+def viewbook(book_id):
+    book = Book.query.get_or_404(book_id)
+    genres = Genre.query.filter(Genre.genre_id == book.genre).paginate()
+    publish = Publish.query.filter(Publish.publish_id == book.publish_id).paginate()
+    type = Type.query.filter(Type.type_id == book.type_id).paginate()
+    return render_template('viewbook.html', book=book,
+                            genre = genres.items[0].name,
+                            rating_int = int(book.rating),
+                            publish = publish.items[0].name,
+                            type = type.items[0].name,
+                            )
