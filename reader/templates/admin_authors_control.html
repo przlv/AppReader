@@ -30,8 +30,8 @@
                 <td>
                     <a class="fa fa-ellipsis-h  ms-2" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                     <ul class="dropdown-menu" aria-labelledby="dropdown1">
-                        <li class="dropdown-item"><a href="" style="display: block;">Редактировать</a></li>
-                        <li class="dropdown-item"><a href="" style="display: block;">Удалить</a></li>
+                        <li class="dropdown-item"><a href="{{ url_for('editauthors', author_id=author.author_id) }}" style="display: block;">Редактировать</a></li>
+                        <li class="dropdown-item"><a href="{{ url_for('deleteauthors', author_id=author.author_id) }}" style="display: block;">Удалить</a></li>
                     </ul>
                 </td>
                 </tr>

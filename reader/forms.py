@@ -69,4 +69,6 @@ class UserForm(FlaskForm):
                                              Length(min=1, max=50)])
     password = StringField('Пароль', validators=[DataRequired(),
                                              Length(min=1, max=50)])
+    UserType = StringField('Тип пользователя', validators=[DataRequired(),
+                                             Length(min=1, max=50)])
     submit = SubmitField('Обновить')

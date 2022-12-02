@@ -50,7 +50,7 @@ def account():
             
             if result_valid[1] == True:
                 user = User.query.get(result_valid[0])
-                user.Auth = 1
+                user.last_logon = datetime.datetime.today()
                 try:
                     db.session.commit()
                 except:
@@ -279,7 +279,89 @@ def admin_users():
     users = User.query.order_by(User.first_name.desc()).paginate()
     return render_template('admin_user_control.html', users=users.items)
 
+@app.route('/edituser/<int:user_id>', methods=['GET', 'POST'])
+def edituser(user_id):
+    user = User.query.get_or_404(user_id)
+    if request.method == 'GET':
+        return render_template('admin-edit-user.html', user=user)
+    elif request.method == 'POST':
+        form = UserForm(request.form)
+        user.first_name = form.first_name.data
+        user.surname = form.surname.data
+        user.last_name = form.last_name.data
+        user.phone = form.phone.data
+        user.zipcode = form.zipcode.data
+        user.address = form.address.data
+        user.login = form.login.data
+        user.password = form.password.data
+        user.UserType = form.UserType.data
+
+        db.session.commit()
+        return redirect(url_for('admin_users'))
+
+@app.route('/deleteuser/<int:user_id>')
+def deleteuser(user_id):
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('admin_users'))
+
 @app.route('/admin-authors/')
 def admin_authors():
     authors = Author.query.order_by(Author.first_name.desc()).paginate()
     return render_template('admin_authors_control.html', authors=authors.items)
+
+@app.route('/editauthors/<int:author_id>', methods=['GET', 'POST'])
+def editauthors(author_id):
+    author = Author.query.get_or_404(author_id)
+    if request.method == 'GET':
+        return render_template('admin-edit-author.html', author=author)
+    elif request.method == 'POST':
+        form = AuthorForm(request.form)
+        if request.files['cover']:
+            file = request.files['cover']
+            filepath = ''
+            filepath = '/'.join(['reader/uploads',file.filename])
+            file.save(filepath)
+            cover = file.filename
+        else:
+            cover = author.cover
+        author.first_name = form.first_name.data
+        author.surname = form.surname.data
+        author.last_name = form.last_name.data
+        author.cover = cover
+
+        db.session.commit()
+        return redirect(url_for('admin_authors'))
+
+@app.route('/deleteauthors/<int:author_id>')
+def deleteauthors(author_id):
+    author = Author.query.get_or_404(author_id)
+    db.session.delete(author)
+    db.session.commit()
+    return redirect(url_for('admin_authors'))
+
+@app.route('/admin-add-author/', methods=['GET', 'POST'])
+def admin_add_author():
+    if request.method == 'POST':
+        form = AuthorForm(request.form)
+        if request.files['cover']:
+            file = request.files['cover']
+            filepath = ''
+            filepath = '/'.join(['reader/uploads',file.filename])
+            file.save(filepath)
+            cover = file.filename
+        else:
+            cover = 'default.jpg'
+        new_author = Author(
+            first_name = form.first_name.data,
+            surname = form.surname.data,
+            last_name = form.last_name.data,
+            cover = cover,
+        )
+        db.session.add(new_author)
+        db.session.commit()
+        return redirect(url_for('admin_authors'))
+
+    elif request.method == 'GET':
+        return render_template('admin-add-author.html')
