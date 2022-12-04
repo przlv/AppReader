@@ -44,14 +44,53 @@
         </div>
         <div class="col-md-2">
             {% if not user_id == -1 %}
-            <button type="button" class="btn1 btn-info" data-toggle="modal" data-target="#staticBackdrop"> <i
+            <button type="button" class="btn1 btn-info" style="width:120px" data-toggle="modal" data-target="#staticBackdrop"> <i
                     class="fa fa-rocket"></i> Купить
             </button>
+            <button type="button" class="btn1 btn-info" style="width:120px; margin-top: 10px;" data-toggle="modal" data-target="#staticlike"> <i
+                class="fa fa-thumbs-up"></i> Оценить
+            </button>
             {% else %}
-            <button type="button" class="btn1 btn-info" data-toggle="modal" data-target="#staticBackdropFail"> <i
+            <button type="button" class="btn1 btn-info" style="width:120px" data-toggle="modal" data-target="#staticBackdropFail"> <i
                 class="fa fa-rocket"></i> Купить
             </button>
             {% endif %}
+            <div class="modal fade" id="staticlike" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="tabs mt-3">
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="text-center" style="display:flex; flex-direction:column; align-items: center">
+                                        <h5>Оценить</h5>
+                                        <a href="{{ url_for('feedlike', book_id=book.book_id, rating=5) }}" style="width: 150px;margin-bottom: 1rem;margin-top: 1rem;" class="btn btn-info">
+                                        {% for n in range(5) %}
+                                        <span class="fa fa-star checked" style="color:orange;"></span>
+                                        {% endfor %}</a>
+                                        <a href="{{ url_for('feedlike', book_id=book.book_id, rating=4) }}" style="width: 150px;margin-bottom: 1rem;" class="btn btn-info">
+                                        {% for n in range(4) %}
+                                        <span class="fa fa-star checked" style="color:orange;"></span>
+                                        {% endfor %}</a>
+                                        <a href="{{ url_for('feedlike', book_id=book.book_id, rating=3) }}" style="width: 150px;margin-bottom: 1rem;" class="btn btn-info">
+                                        {% for n in range(3) %}
+                                        <span class="fa fa-star checked" style="color:orange;"></span>
+                                        {% endfor %}</a>
+                                        <a href="{{ url_for('feedlike', book_id=book.book_id, rating=2) }}" style="width: 150px;margin-bottom: 1rem;" class="btn btn-info">
+                                        {% for n in range(2) %}
+                                        <span class="fa fa-star checked" style="color:orange;"></span>
+                                        {% endfor %}</a>
+                                        <a href="{{ url_for('feedlike', book_id=book.book_id, rating=1) }}" style="width: 150px;margin-bottom: 1rem;" class="btn btn-info">
+                                        {% for n in range(1) %}
+                                        <span class="fa fa-star checked" style="color:orange;"></span>
+                                        {% endfor %}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="modal fade" id="staticBackdropFail" data-backdrop="static" data-keyboard="false" tabindex="-1"
                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">

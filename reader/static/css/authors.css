@@ -16,7 +16,7 @@
     color: #0099ff;
     margin-bottom: 2rem;
     width: 250px;
-    height: 500px;
+    height: 550px;
 }
 
 .card-img {
@@ -161,5 +161,3 @@
    color: #000; }
 .custom-dropdown .dropdown-menu a:hover .number, .custom-dropdown .dropdown-menu a:active .number, .custom-dropdown .dropdown-menu a:focus .number {
    color: #fff; }
-   
- 

@@ -407,8 +407,6 @@ def buybook():
     jsdata = request.form['javascript_data']
     book_id = int(jsdata)
     book = Book.query.get_or_404(book_id)
-
-    form = DeliveryForm()
     new_buy = Delivery(
         date= datetime.datetime.today(),
         count= 1,
@@ -422,3 +420,20 @@ def buybook():
     db.session.commit()
 
     return {'ok':1}
+
+
+@app.route('/cosmos/')
+def cosmos():
+    return render_template('cosmos.html')
+
+@app.route('/feedlike/<int:book_id>/<int:rating>')
+def feedlike(book_id, rating):
+    new_feed = Feedback(
+        comment= 'None',
+        rating= rating,
+        user_id= current_user,
+        book_id= book_id,
+    )
+    db.session.add(new_feed)
+    db.session.commit()
+    return redirect(url_for('index'))
