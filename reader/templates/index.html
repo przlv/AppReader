@@ -5,37 +5,46 @@
 <link href="{{ url_for('static', filename='css/authors.css') }}" rel="stylesheet">
 
 <button id="sort" method="POST" action="" name="sort">
-   <button class="price_asc"><a href="/1">Cначала дешевые</a></button>
-      <button class="price_desc"><a href="/2">Сначала дорогие</a></button>
-         <button class="rating_asc"><a href="/3">По понижению рейтинга</a></button>
-            <button class="rating_desc"><a href="/4">По возрастанию рейтинга</a></button>
-               <button class="good_asc"><a href="/5">По названию, A - Я</a></button>
-                  <button class="good_desc"><a href="/6">По названию, Я - А</a></button>
-                     <button class="year_desc"><a href="/7">По году издания</a></button>
+    <button class="price_asc"><a href="/1">Cначала дешевые</a></button>
+    <button class="price_desc"><a href="/2">Сначала дорогие</a></button>
+    <button class="rating_asc"><a href="/3">По понижению рейтинга</a></button>
+    <button class="rating_desc"><a href="/4">По возрастанию рейтинга</a></button>
+    <button class="good_asc"><a href="/5">По названию, A - Я</a></button>
+    <button class="good_desc"><a href="/6">По названию, Я - А</a></button>
+    <button class="year_desc"><a href="/7">По году издания</a></button>
 </button>
 <div class="container mx-auto mt-4">
-   <!-- <div class="row"> -->
-       <div class="col-md-4">
+    <!-- <div class="row"> -->
+    <div class="col-md-4">
         <!--Search Box-->
-            <div id="wrap">
-                <form action="" autocomplete="on">
-                    <input id="search" name="search" type="text" placeholder="Что будем искать ?"><input id="search_submit" value="Rechercher" type="submit">
-                </form>
+        <div id="wrap">
+            <form action="" autocomplete="on">
+                <input id="search" name="search" type="text" placeholder="Что будем искать ?"><input id="search_submit"
+                    value="Rechercher" type="submit">
+            </form>
+        </div>
+        {% for book in books_list.items %}
+        <div class="card" style="width: 18rem;">
+            <div>
+                <img src="{{ url_for('send_file', filename=book.cover) }}" class="card-img">
+                <div style="padding-left:10px">
+                {% for n in range(book.rating | int) %}
+                <span class="fa fa-star checked" style="color:orange;"></span>
+                {% endfor %}{{book.rating}}
             </div>
-           {% for book in books_list.items %}
-           <div class="card" style="width: 18rem;">
-               <img src="{{ url_for('send_file', filename=book.cover) }}" class="card-img">
-               <div class="card-body">
-                   <h5 class="card-title">{{book.title}}</h5>
-                   <h6 class="card-subtitle mb-2 text-muted">{{book.description[:40]+'...'}}</h6>
-                   <a href="{{ url_for('viewbook', book_id=book.book_id) }}" class="btn btn-info">Подробнее</a>
-               </div>
-           </div>
-           {% endfor %}
-       </div>
-   <!-- </div> -->
+                
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{book.title}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{book.description[:40]+'...'}}</h6>
+                <a href="{{ url_for('viewbook', book_id=book.book_id) }}" class="btn btn-info">Подробнее</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- </div> -->
 </div>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js'></script>
-{% endblock %}   
+{% endblock %}

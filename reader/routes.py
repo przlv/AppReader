@@ -422,3 +422,8 @@ def buybook():
     db.session.commit()
 
     return {'ok':1}
+
+
+@app.route('/cosmos/')
+def cosmos():
+    return render_template('cosmos.html')
