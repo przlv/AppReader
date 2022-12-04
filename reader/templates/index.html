@@ -4,38 +4,58 @@
 {% block content %}
 <link href="{{ url_for('static', filename='css/authors.css') }}" rel="stylesheet">
 
-<button id="sort" method="POST" action="" name="sort">
-   <button class="price_asc"><a href="/1">Cначала дешевые</a></button>
-      <button class="price_desc"><a href="/2">Сначала дорогие</a></button>
-         <button class="rating_asc"><a href="/3">По понижению рейтинга</a></button>
-            <button class="rating_desc"><a href="/4">По возрастанию рейтинга</a></button>
-               <button class="good_asc"><a href="/5">По названию, A - Я</a></button>
-                  <button class="good_desc"><a href="/6">По названию, Я - А</a></button>
-                     <button class="year_desc"><a href="/7">По году издания</a></button>
-</button>
-<div class="container mx-auto mt-4">
-   <!-- <div class="row"> -->
-       <div class="col-md-4">
-        <!--Search Box-->
-            <div id="wrap">
-                <form action="" autocomplete="on">
-                    <input id="search" name="search" type="text" placeholder="Что будем искать ?"><input id="search_submit" value="Rechercher" type="submit">
-                </form>
+<div class="container">
+    <div class="row justify-content-center text-center">
+        <div class="col-md-5">
+            <div class="dropdown custom-dropdown">
+                <a href="#" data-toggle="dropdown" class="align-items-center dropdown-link " aria-haspopup="true"
+                    aria-expanded="false" data-offset="-70, 20">
+                    Menu
+                    <span class="arrow icon-keyboard_arrow_down"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <h3 class="menu-heading">Help &amp; Feedback</h3>
+                    <a class="dropdown-item" href="/1"> <span class="icon icon-dashboard"></span> Getting started</a>
+                    <a class="dropdown-item" href="/2"><span class="icon icon-mail_outline"></span>Help center <span
+                            class="number">3</span></a>
+                    <a class="dropdown-item" href="/3"><span class="icon icon-people"></span>Contact us</a>
+                    <hr>
+                    <h3 class="menu-heading">About</h3>
+                    <a class="dropdown-item" href="/4"><span class="icon icon-comment"></span>Blog</a>
+                    <a class="dropdown-item" href="/5"><span class="icon icon-lock_outline"></span>Privacy</a>
+                    <a class="dropdown-item" href="/5"><span class="icon icon-security"></span>Security</a>
+                    <a class="dropdown-item" href="/6"><span class="icon icon-featured_play_list"></span>Terms of
+                        service</a>
+                </div>
             </div>
-           {% for book in books_list.items %}
-           <div class="card" style="width: 18rem;">
-               <img src="{{ url_for('send_file', filename=book.cover) }}" class="card-img">
-               <div class="card-body">
-                   <h5 class="card-title">{{book.title}}</h5>
-                   <h6 class="card-subtitle mb-2 text-muted">{{book.description[:40]+'...'}}</h6>
-                   <a href="{{ url_for('viewbook', book_id=book.book_id) }}" class="btn btn-info">Подробнее</a>
-               </div>
-           </div>
-           {% endfor %}
-       </div>
-   <!-- </div> -->
+        </div>
+    </div>
+</div>
+
+<div class="container mx-auto mt-4">
+    <!-- <div class="row"> -->
+    <div class="col-md-4">
+        <!--Search Box-->
+        <div id="wrap">
+            <form action="" autocomplete="on">
+                <input id="search" name="search" type="text" placeholder="Что будем искать ?"><input id="search_submit"
+                    value="Rechercher" type="submit">
+            </form>
+        </div>
+        {% for book in books_list.items %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{ url_for('send_file', filename=book.cover) }}" class="card-img">
+            <div class="card-body">
+                <h5 class="card-title">{{book.title}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{book.description[:40]+'...'}}</h6>
+                <a href="{{ url_for('viewbook', book_id=book.book_id) }}" class="btn btn-info">Подробнее</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- </div> -->
 </div>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js'></script>
-{% endblock %}   
+{% endblock %}
