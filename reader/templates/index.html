@@ -28,11 +28,11 @@
             <div>
                 <img src="{{ url_for('send_file', filename=book.cover) }}" class="card-img">
                 <div style="padding-left:10px">
-                {% for n in range(book.rating | int) %}
-                <span class="fa fa-star checked" style="color:orange;"></span>
-                {% endfor %}{{book.rating}}
-            </div>
-                
+                    {% for n in range(book.rating | int) %}
+                    <span class="fa fa-star checked" style="color:orange;"></span>
+                    {% endfor %}{{book.rating}}
+                </div>
+
             </div>
             <div class="card-body">
                 <h5 class="card-title">{{book.title}}</h5>
