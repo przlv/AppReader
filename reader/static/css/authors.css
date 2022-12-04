@@ -91,4 +91,75 @@
    opacity: 0.9;
  }
 
+ .custom-dropdown {
+   border: none !important;  
+   background-color: #17a2b8; 
+   font-size: 18px;
+   font-weight: bold;
+
+}  
+.custom-dropdown > a {
+   color: rgb(255, 254, 254);
+ }
+.custom-dropdown > a .arrow {
+   display: inline-block;
+   position: relative;
+   transition: .3s transform ease;
+   transition: .3s transform ease;
+   transition: .3s transform ease; 
+}
+.custom-dropdown.show > a .arrow {
+  transform: rotate(-180deg);
+  transform: rotate(-180deg);
+   transform: rotate(-180deg);
+}
+.custom-dropdown .btn:active, .custom-dropdown .btn:focus {
+  box-shadow: none !important;
+  box-shadow: none !important;
+  outline: none;
+}
+.custom-dropdown .btn.btn-custom {
+  border: 1px solid #efefef; 
+}
+  
+.custom-dropdown hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #e9ecef;
+  margin: .5em 0;
+  padding: 0;
+ }
+.custom-dropdown .dropdown-menu {
+  border: 1px solid transparent !important;
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
+  margin-top: -10px !important;
+  padding: 20px 0;
+  border-radius: 0;
+  background: rgb(255, 255, 255);
+  transition: .3s margin-top ease, .3s opacity ease, .3s visibility ease;
+  transition: .3s margin-top ease, .3s opacity ease, .3s visibility ease;
+  transition: .3s margin-top ease, .3s opacity ease, .3s visibility ease;
+ }
+.custom-dropdown .dropdown-menu.active {
+    opacity: 1;
+    visibility: visible;
+    margin-top: 0px !important; }
+.custom-dropdown .dropdown-menu a {
+   font-size: 14px;
+   padding: 8px 20px;
+   position: relative;
+   color: #000; }
+.custom-dropdown .dropdown-menu a:last-child {
+   border-bottom: none; }
+ .custom-dropdown .dropdown-menu a .icon {
+   margin-right: 15px;
+   display: inline-block; }
+.custom-dropdown .dropdown-menu a:hover, .custom-dropdown .dropdown-menu a:active, .custom-dropdown .dropdown-menu a:focus {
+   background: #17a2b8;
+   color: #000; }
+.custom-dropdown .dropdown-menu a:hover .number, .custom-dropdown .dropdown-menu a:active .number, .custom-dropdown .dropdown-menu a:focus .number {
+   color: #fff; }
+   
  
