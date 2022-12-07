@@ -284,9 +284,9 @@ def sort(sort_id):
    if sort_id == 2:
       bookss = Book.query.order_by(Book.price.desc()).paginate()
    if sort_id == 3:
-      bookss = Book.query.order_by(Book.rating.asc()).paginate()
-   if sort_id == 4:
       bookss = Book.query.order_by(Book.rating.desc()).paginate()
+   if sort_id == 4:
+      bookss = Book.query.order_by(Book.rating.asc()).paginate()
    if sort_id == 5:
       bookss = Book.query.order_by(Book.title.asc()).paginate()
    if sort_id == 6:
