@@ -84,6 +84,7 @@
                                         {% for n in range(1) %}
                                         <span class="fa fa-star checked" style="color:orange;"></span>
                                         {% endfor %}</a>
+                                        <div class="col-md-6" style="width:300px;"><label class="labels">Отзыв<input name="feed" type="text" class="form-control" value=""></div>
                                     </div>
                                 </div>
                             </div>
@@ -292,6 +293,33 @@
             </div>
         </div>
     </div>
+    {% for feedbk in feedback %}
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <div class="card card-white post" style="width:1000px;">
+                        <div class="post-heading">
+                            <div class="float-left image">
+                                <img src="https://e7.pngegg.com/pngimages/698/39/png-clipart-computer-icons-user-profile-info-miscellaneous-face.png" class="img-circle avatar" alt="user profile image">
+                            </div>
+                            <div class="float-left meta">
+                                <div class="title h5">
+                                    <a><b>{{ users[feedbk.user_id-1].first_name }}   </b></a>
+                                    {% for n in range((feedbk.rating)|int) %}
+                                        <span class="fa fa-star checked" style="color:orange;"></span>
+                                    {% endfor %}
+                                </div>
+                                <h6 class="text-muted time">{{ users[feedbk.user_id-1].address }}</h6>
+                            </div>
+                        </div> 
+                        <div class="post-description"> 
+                            <p>{{ feedbk.comment }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 </div>
 
 

@@ -6,7 +6,7 @@ from PIL import Image
 from reader.forms import *
 from reader.validator import *
 from sqlalchemy.exc import IntegrityError
-from random import randrange
+from random import randrange, choice
 import datetime
 from scripts import generate_quote
 
@@ -15,8 +15,26 @@ app.jinja_env.globals.update(generate_quote=generate_quote)
 
 @app.route('/')
 def index():
-   bookss = Book.query.order_by(Book.title.desc()).paginate()
-   return render_template('index.html', books_list = bookss)
+    bookss = Book.query.order_by(Book.title.desc()).paginate()
+    
+    for book in bookss.items:
+        feedbacks = Feedback.query.filter(Feedback.book_id == book.book_id).paginate()
+        feedbacks = feedbacks.items
+        if feedbacks:
+            sumfeed = 0
+            for feed in feedbacks:
+                sumfeed += feed.rating
+            sumfeed /= len(feedbacks)
+
+            edit_book = Book.query.get(book.book_id)
+            edit_book.rating = round(sumfeed, 2)
+            db.session.commit()
+        else:
+            edit_book = Book.query.get(book.book_id)
+            edit_book.rating = 0
+            db.session.commit()
+
+    return render_template('index.html', books_list = bookss)
 
 
 @app.route('/uploads/<filename>')
@@ -394,12 +412,16 @@ def viewbook(book_id):
     genres = Genre.query.filter(Genre.genre_id == book.genre).paginate()
     publish = Publish.query.filter(Publish.publish_id == book.publish_id).paginate()
     type = Type.query.filter(Type.type_id == book.type_id).paginate()
+    feedback = Feedback.query.filter(Feedback.book_id == book_id).paginate()
+    users = User.query.order_by(User.user_id.asc()).paginate()
     return render_template('viewbook.html', book=book,
                             genre = genres.items[0].name,
                             rating_int = int(book.rating),
                             publish = publish.items[0].name,
                             type = type.items[0].name,
                             user_id = current_user,
+                            feedback = feedback.items,
+                            users = users.items,
                             )
 
 @app.route('/buybook', methods= ['POST'])
@@ -465,12 +487,18 @@ def cosmos():
 
 @app.route('/feedlike/<int:book_id>/<int:rating>')
 def feedlike(book_id, rating):
-    new_feed = Feedback(
-        comment= 'None',
-        rating= rating,
-        user_id= current_user,
-        book_id= book_id,
-    )
-    db.session.add(new_feed)
-    db.session.commit()
+    feedback = Feedback.query.filter((Feedback.user_id == current_user)&(Feedback.book_id == book_id)).paginate()
+    feedback = feedback.items
+    if (not feedback) and (current_user!=-1):
+        with open('reader/uploads/feedback.txt', encoding='utf-8') as file:
+            txt = file.readlines()
+        new_feed = Feedback(
+            feedback_id = randrange(100,9999),
+            comment= choice(txt),
+            rating= rating,
+            user_id= current_user,
+            book_id= book_id,
+        )
+        db.session.add(new_feed)
+        db.session.commit()
     return redirect(url_for('index'))
