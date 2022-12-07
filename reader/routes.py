@@ -419,8 +419,45 @@ def buybook():
     book.count -= 1
     db.session.commit()
 
-    return {'ok':1}
+    deliverys = Delivery.query.order_by(Delivery.user_id == current_user).paginate()
+    
+    list_added = {}
+    deliverys = deliverys.items
+    for deliv in deliverys:
+        reg_date = f'{deliv.date.year}-{deliv.date.month}-{deliv.date.day}'
+        if not reg_date in list_added:
+            list_added[reg_date] = []
+        list_added[reg_date].append(deliv)
+    
+    for key, group in list_added.items():
+        if len(group) > 1:
+            count = 0
+            description =''
+            weight = 0
+            price = 0
+            for item in group:
+                count += item.count
+                description += item.description +'; '
+                weight += item.weight
+                price += item.price
+            
+            for item in group:
+                delivery = Delivery.query.get_or_404(item.delivery_id)
+                db.session.delete(delivery)
+            db.session.commit()
 
+            new_buy = Delivery(
+                            date= group[0].date,
+                            count= count,
+                            description= description,
+                            weight = weight,
+                            user_id=current_user,
+                            price=price,
+                    )
+            db.session.add(new_buy)
+            db.session.commit()
+
+    return {'ok':1}
 
 @app.route('/cosmos/')
 def cosmos():

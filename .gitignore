@@ -6,3 +6,4 @@ reader/__pycache__/routes.cpython-310.pyc
 reader/__pycache__/validator.cpython-310.pyc
 __pycache__/scripts.cpython-310.pyc
 *.pyc
+*.pyc
