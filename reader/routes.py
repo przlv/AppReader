@@ -16,7 +16,12 @@ app.jinja_env.globals.update(generate_quote=generate_quote)
 @app.route('/')
 def index():
     bookss = Book.query.order_by(Book.title.desc()).paginate()
-    
+    authors = Author.query.order_by(Author.surname.desc()).paginate()
+    type = Type.query.order_by(Type.name.desc()).paginate()
+    publish = Publish.query.order_by(Publish.name.desc()).paginate()
+    level = Level.query.order_by(Level.name.desc()).paginate()
+    genre = Genre.query.order_by(Genre.name.desc()).paginate()
+
     for book in bookss.items:
         feedbacks = Feedback.query.filter(Feedback.book_id == book.book_id).paginate()
         feedbacks = feedbacks.items
@@ -34,7 +39,13 @@ def index():
             edit_book.rating = 0
             db.session.commit()
 
-    return render_template('index.html', books_list = bookss)
+    return render_template('index.html',
+                            books_list = bookss,
+                            authors=authors.items,
+                            type=type.items,
+                            publish=publish.items,
+                            level=level.items,
+                            genre=genre.items,)
 
 
 @app.route('/uploads/<filename>')

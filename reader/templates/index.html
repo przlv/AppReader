@@ -5,36 +5,129 @@
 <link href="{{ url_for('static', filename='css/authors.css') }}" rel="stylesheet">
 
 <div class="container">
-   <div class="row justify-content-left text-center">
-       <div class="col-md-4">
-           <div class="dropdown custom-dropdown">
-               <a href="#" data-toggle="dropdown" class="align-items-center dropdown-link " aria-haspopup="true"
-                   aria-expanded="false" data-offset="-70, 20">
-                   Сортировка книг
-                   <span class="arrow icon-keyboard_arrow_down"></span>
-               </a>
-               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                   <a class="dropdown-item" href="/1"> <span class="icon icon-dashboard"></span>Сначала дешевые</a>
-                   <a class="dropdown-item" href="/2"><span class="icon icon-mail_outline"></span>Сначала дорогие</span></a>
-                   <a class="dropdown-item" href="/3"><span class="icon icon-dashboard"></span>Высокооценённые</span></a>
-                   <a class="dropdown-item" href="/4"><span class="icon icon-mail_outline"></span>Низкооценённые</span></a>
-                   <a class="dropdown-item" href="/5"><span class="icon icon-dashboard"></span>По названию, А-Я</span></a>
-                   <a class="dropdown-item" href="/6"><span class="icon icon-mail_outline"></span>По названию, Я-А</span></a>
-                   <a class="dropdown-item" href="/7"><span class="icon icon-dashboard"></span>Год публикации</span></a>
-               </div>
-           </div>
-       </div>
-   </div>
+    <div class="row justify-content-left text-center" style="justify-content: center;">
+        <div class="col-md-4" style="display: flex; flex-direction:column;">
+            <div class="dropdown d-block">
+                <button class="btn mb-2 mb-md-0 btn-primary btn-block dropdown-toggle" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Сортировка
+                </button>
+                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="/1"> <span class="icon icon-dashboard"></span>Сначала дешевые</a>
+                    <a class="dropdown-item" href="/2"><span class="icon icon-mail_outline"></span>Сначала
+                        дорогие</span></a>
+                    <a class="dropdown-item" href="/3"><span
+                            class="icon icon-dashboard"></span>Высокооценённые</span></a>
+                    <a class="dropdown-item" href="/4"><span
+                            class="icon icon-mail_outline"></span>Низкооценённые</span></a>
+                    <a class="dropdown-item" href="/5"><span class="icon icon-dashboard"></span>По названию,
+                        А-Я</span></a>
+                    <a class="dropdown-item" href="/6"><span class="icon icon-mail_outline"></span>По названию,
+                        Я-А</span></a>
+                    <a class="dropdown-item" href="/7"><span class="icon icon-dashboard"></span>Год
+                        публикации</span></a>
+                </div>
+            </div>
+            <button class="btn mb-2 mb-md-0 btn-primary btn-block" type="button" data-toggle="modal" data-target="#staticfilter" style="width:133px;margin-top: 10px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel-fill" viewBox="0 0 16 16">
+                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+              </svg> Фильтры
+            </button>
+        </div>
+    </div>
 </div>
+<div class="modal fade" id="staticfilter" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="text-right"> <i class="fa fa-close close" onclick="(document.getElementById('check-icon').style.display='none');(document.getElementById('check-icon2').style.display='none');" data-dismiss="modal"></i> </div>
+                            <div class="tabs mt-3">
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="text-center" style="display:flex; flex-direction:column; align-items: center">
+                                        <h5>Фильтры</h5>
+                                        <form class="p-3 py-5" style="display:flex; flex-direction:column;align-items: center" method="POST" action="/" enctype="multipart/form-data">
+                                            
+                                            <label class="labels">Рейтинг</label>
+                                            <input type="text" style="width:40px" name="rating" autocomplete="off" list="ratinglist" />
+                                            <datalist id="ratinglist">
+                                                <option>5</option>
+                                                <option>4</option>
+                                                <option>3</option>
+                                                <option>2</option>
+                                                <option>1</option>
+                                                <option>0</option>
+                                            </datalist>
 
+                                            <label class="labels">Жанр</label>
+                                            <input class="form-control" type="text" style="width:150px" name="genre" autocomplete="off" list="genrelist" />
+                                            <datalist id="genrelist">
+                                                {% for g in genre %}
+                                                    <option>{{g.name}}</option>
+                                                {% endfor %}
+                                            </datalist>
+
+                                            <label class="labels" style="padding-top: 20px;">Год издания</label>
+                                            <div style="display:flex; flex-direction:row;">
+                                                <label class="labels" style="margin: 10px;">От</label><input name="date1" type="date" class="form-control" value="" autocomplete="off">
+                                                <label class="labels" style="margin: 10px;">До</label><input name="date2" type="date" class="form-control" value="" autocomplete="off">
+                                            </div>
+                                            
+                                            <label class="labels" style="padding-top: 20px;">Цена</label>
+                                            <div style="display:flex; flex-direction:row;">
+                                                <label class="labels" style="margin: 10px;">От</label><input name="price1" type="number" class="form-control" value="" autocomplete="off">
+                                                <label class="labels" style="margin: 10px;">До</label><input name="price2" type="number" class="form-control" value="" autocomplete="off">
+                                            </div>
+                                        
+                                            <label class="labels">Автор</label>
+                                            <input class="form-control" type="text" style="width:150px" name="author" autocomplete="off" list="Authorslist" />
+                                            <datalist id="Authorslist">
+                                                {% for author in authors %}
+                                                    <option>{{author.first_name}} {{author.last_name}} {{author.surname}}</option>
+                                                {% endfor %}
+                                            </datalist>
+
+                                            <label class="labels">Тип литературы</label>
+                                            <input class="form-control" type="text" style="width:150px" name="type" autocomplete="off" list="typelist" />
+                                            <datalist id="typelist">
+                                                {% for t in type %}
+                                                    <option>{{t.name}}</option>
+                                                {% endfor %}
+                                            </datalist>
+                                        
+                                            <label class="labels">Издательство</label>
+                                            <input class="form-control" type="text" style="width:150px" name="publish" autocomplete="off" list="publist" />
+                                            <datalist id="publist">
+                                                {% for pub in publish %}
+                                                    <option>{{pub.name}}</option>
+                                                {% endfor %}
+                                            </datalist>
+
+                                            <label class="labels">Уровень образования</label>
+                                            <input class="form-control" type="text" style="width:150px" name="level" autocomplete="off" list="lvllist" />
+                                            <datalist id="lvllist">
+                                                {% for lvl in level %}
+                                                    <option>{{lvl.name}}</option>
+                                                {% endfor %}
+                                            </datalist>
+                                            <button class="btn btn-primary profile-button" style="margin-top:20px; width: 100px;" type="submit">Найти</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 <div class="container mx-auto mt-4">
     <!-- <div class="row"> -->
     <div class="col-md-4">
         <!--Search Box-->
         <div id="wrap">
             <form action="" autocomplete="on">
-                <input id="search" name="search" type="text" placeholder="Что будем искать ?"><input id="search_submit"
-                    value="Rechercher" type="submit">
+                <div style="display:flex; flex-direction:row;">
+                    <input id="search" name="search" type="text" placeholder="   Что будем искать ?">
+                    <button class="btn btn-primary profile-button" style="width: 150px; margin-left: 15px;" type="submit">Найти</button>
+                </div>
             </form>
         </div>
         {% for book in books_list.items %}
