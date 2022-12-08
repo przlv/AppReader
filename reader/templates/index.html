@@ -45,7 +45,7 @@
                                 <div class="tab-content" id="myTabContent">
                                     <div class="text-center" style="display:flex; flex-direction:column; align-items: center">
                                         <h5>Фильтры</h5>
-                                        <form class="p-3 py-5" style="display:flex; flex-direction:column;align-items: center" method="POST" action="" enctype="multipart/form-data">
+                                        <form name="filters" class="p-3 py-5" style="display:flex; flex-direction:column;align-items: center" method="POST" action="" enctype="multipart/form-data">
                                             
                                             <label class="labels">Рейтинг</label>
                                             <input type="text" style="width:40px" name="rating" autocomplete="off" list="ratinglist" />
@@ -123,7 +123,7 @@
     <div class="col-md-4">
         <!--Search Box-->
         <div id="wrap">
-            <form action="" autocomplete="on">
+            <form name="search" class="p-3 py-5" method="POST" action="" enctype="multipart/form-data" autocomplete="on">
                 <div style="display:flex; flex-direction:row;">
                     <input id="search" name="search" type="text" placeholder="   Что будем искать ?">
                     <button class="btn btn-primary profile-button" style="width: 150px; margin-left: 15px;" type="submit">Найти</button>
