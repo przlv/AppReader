@@ -221,9 +221,29 @@ def account():
 #   data = Book.query.all()
 #   return jsonify(data)  
 
-@app.route('/authors/')
+@app.route('/authors/', methods=('GET', 'POST'))
 def authors():
     authorss = Author.query.order_by(Author.surname.desc()).paginate()
+    if request.method == "POST":
+            form  = request.form
+            desired_text = form['search']
+            filter_authors = []
+            if desired_text != '':
+                for author in authorss.items:
+                    if desired_text in author.first_name:
+                        filter_authors.append(author.author_id)
+                        continue
+                    if desired_text in author.surname:
+                        filter_authors.append(author.author_id)
+                        continue
+                    if desired_text in author.last_name:
+                        filter_authors.append(author.author_id)
+                        continue
+
+            authorss.items = []
+            for indx in filter_authors:
+                authorss.items.append(Author.query.get(indx))    
+
     return render_template('authors.html', authors_list = authorss)
 
 @app.route('/menu/')
