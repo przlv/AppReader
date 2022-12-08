@@ -71,7 +71,17 @@ class UserForm(FlaskForm):
                                              Length(min=1, max=50)])
     UserType = StringField('Тип пользователя', validators=[DataRequired(),
                                              Length(min=1, max=50)])
+
+    Regname = StringField('Логин', validators=[DataRequired(),
+                                             Length(min=1, max=50)])
+    Regemail =  StringField('Логин', validators=[DataRequired(),
+                                             Length(min=1, max=50)])
+    Regpass =   StringField('Логин', validators=[DataRequired(),
+                                             Length(min=1, max=50)])
+    reglog =    StringField('Логин', validators=[DataRequired(),
+                                             Length(min=1, max=50)])                                                                         
     submit = SubmitField('Обновить')
+
 
 class DeliveryForm(FlaskForm):
     delivery_id = IntegerField('ID книги', validators=[DataRequired()])
