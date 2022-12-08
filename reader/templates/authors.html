@@ -21,6 +21,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{author.surname}}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{author.first_name + ' ' + author.last_name}}</h6>
+                    <a href="{{ url_for('authoropen', author_id=author.author_id) }}" class="btn btn-info">Подробнее</a>
                 </div>
             </div>
             {% endfor %}

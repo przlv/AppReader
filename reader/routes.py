@@ -619,3 +619,20 @@ def genreopen(genre_id):
                             publish=publish.items,
                             level=level.items,
                             genre=genre.items,)
+
+@app.route('/authoropen/<int:author_id>')
+def authoropen(author_id):
+    bookss = Book.query.filter(Book.author_id == author_id).paginate()
+    authors = Author.query.order_by(Author.surname.desc()).paginate()
+    type = Type.query.order_by(Type.name.desc()).paginate()
+    publish = Publish.query.order_by(Publish.name.desc()).paginate()
+    level = Level.query.order_by(Level.name.desc()).paginate()
+    genre = Genre.query.order_by(Genre.name.desc()).paginate()
+
+    return render_template('index.html',
+                            books_list = bookss,
+                            authors=authors.items,
+                            type=type.items,
+                            publish=publish.items,
+                            level=level.items,
+                            genre=genre.items,)
