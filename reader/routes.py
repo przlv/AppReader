@@ -42,33 +42,57 @@ def index():
                 db.session.commit()
     elif request.method == 'POST':
         form = request.form
-        filter_books = []
-        for book in bookss.items:
-            if form['rating'] != '':
-                if int(book.rating) != int(form['rating']):
+        if not 'search' in form:
+            filter_books = []
+            for book in bookss.items:
+                if form['rating'] != '':
+                    if int(book.rating) != int(form['rating']):
+                        continue
+                if Genre.query.get(book.genre).name != form['genre'] and form['genre'] != '':
                     continue
-            if Genre.query.get(book.genre).name != form['genre'] and form['genre'] != '':
-                continue
-            if form['price1'] != '' or form['price2'] != '':
-                if form['price1'] != '':
-                    if float(form['price1']) > book.price:
+                if form['price1'] != '' or form['price2'] != '':
+                    if form['price1'] != '':
+                        if float(form['price1']) > book.price:
+                            continue
+                    if form['price2'] != '':
+                        if float(form['price2']) < book.price:
+                            continue
+                if (not (Author.query.get(book.author_id).surname in form['author'])) and form['author'] != '':
+                    continue
+                if Type.query.get(book.type_id).name != form['type'] and form['type'] != '':
+                    continue
+                if Publish.query.get(book.publish_id).name != form['publish'] and form['publish'] != '':
+                    continue
+                if Level.query.get(book.level_id).name != form['level'] and form['level'] != '':
+                    continue
+                filter_books.append(book.book_id)
+            
+            bookss.items = []
+            for indx in filter_books:
+                bookss.items.append(Book.query.get(indx))
+        else:
+            desired_text = form['search']
+            filter_books = []
+            if desired_text != '':
+                for book in bookss.items:
+                    if desired_text in book.title:
+                        filter_books.append(book.book_id)
                         continue
-                if form['price2'] != '':
-                    if float(form['price2']) < book.price:
+                    if desired_text in book.description:
+                        filter_books.append(book.book_id)
                         continue
-            if (not (Author.query.get(book.author_id).surname in form['author'])) and form['author'] != '':
-                continue
-            if Type.query.get(book.type_id).name != form['type'] and form['type'] != '':
-                continue
-            if Publish.query.get(book.publish_id).name != form['publish'] and form['publish'] != '':
-                continue
-            if Level.query.get(book.level_id).name != form['level'] and form['level'] != '':
-                continue
-            filter_books.append(book.book_id)
-        
-        bookss.items = []
-        for indx in filter_books:
-            bookss.items.append(Book.query.get(indx))
+                    try:
+                        if desired_text in book.library_text:
+                            filter_books.append(book.book_id)
+                            continue
+                        if desired_text in book.affinity:
+                            filter_books.append(book.book_id)
+                            continue
+                    except:
+                        continue
+            bookss.items = []
+            for indx in filter_books:
+                bookss.items.append(Book.query.get(indx))    
 
     return render_template('index.html',
                             books_list = bookss,
