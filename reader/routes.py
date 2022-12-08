@@ -15,7 +15,7 @@ from scripts import generate_quote
 current_user = -1
 app.jinja_env.globals.update(generate_quote=generate_quote)
 
-@app.route('/')
+@app.route('/', methods=('GET', 'POST'))
 def index():
     bookss = Book.query.order_by(Book.title.desc()).paginate()
     authors = Author.query.order_by(Author.surname.desc()).paginate()
@@ -23,23 +23,52 @@ def index():
     publish = Publish.query.order_by(Publish.name.desc()).paginate()
     level = Level.query.order_by(Level.name.desc()).paginate()
     genre = Genre.query.order_by(Genre.name.desc()).paginate()
+    if request.method == 'GET':
+        for book in bookss.items:
+            feedbacks = Feedback.query.filter(Feedback.book_id == book.book_id).paginate()
+            feedbacks = feedbacks.items
+            if feedbacks:
+                sumfeed = 0
+                for feed in feedbacks:
+                    sumfeed += feed.rating
+                sumfeed /= len(feedbacks)
 
-    for book in bookss.items:
-        feedbacks = Feedback.query.filter(Feedback.book_id == book.book_id).paginate()
-        feedbacks = feedbacks.items
-        if feedbacks:
-            sumfeed = 0
-            for feed in feedbacks:
-                sumfeed += feed.rating
-            sumfeed /= len(feedbacks)
-
-            edit_book = Book.query.get(book.book_id)
-            edit_book.rating = round(sumfeed, 2)
-            db.session.commit()
-        else:
-            edit_book = Book.query.get(book.book_id)
-            edit_book.rating = 0
-            db.session.commit()
+                edit_book = Book.query.get(book.book_id)
+                edit_book.rating = round(sumfeed, 2)
+                db.session.commit()
+            else:
+                edit_book = Book.query.get(book.book_id)
+                edit_book.rating = 0
+                db.session.commit()
+    elif request.method == 'POST':
+        form = request.form
+        filter_books = []
+        for book in bookss.items:
+            if form['rating'] != '':
+                if int(book.rating) != int(form['rating']):
+                    continue
+            if Genre.query.get(book.genre).name != form['genre'] and form['genre'] != '':
+                continue
+            if form['price1'] != '' or form['price2'] != '':
+                if form['price1'] != '':
+                    if float(form['price1']) > book.price:
+                        continue
+                if form['price2'] != '':
+                    if float(form['price2']) < book.price:
+                        continue
+            if (not (Author.query.get(book.author_id).surname in form['author'])) and form['author'] != '':
+                continue
+            if Type.query.get(book.type_id).name != form['type'] and form['type'] != '':
+                continue
+            if Publish.query.get(book.publish_id).name != form['publish'] and form['publish'] != '':
+                continue
+            if Level.query.get(book.level_id).name != form['level'] and form['level'] != '':
+                continue
+            filter_books.append(book.book_id)
+        
+        bookss.items = []
+        for indx in filter_books:
+            bookss.items.append(Book.query.get(indx))
 
     return render_template('index.html',
                             books_list = bookss,

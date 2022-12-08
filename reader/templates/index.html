@@ -45,7 +45,7 @@
                                 <div class="tab-content" id="myTabContent">
                                     <div class="text-center" style="display:flex; flex-direction:column; align-items: center">
                                         <h5>Фильтры</h5>
-                                        <form class="p-3 py-5" style="display:flex; flex-direction:column;align-items: center" method="POST" action="/" enctype="multipart/form-data">
+                                        <form class="p-3 py-5" style="display:flex; flex-direction:column;align-items: center" method="POST" action="" enctype="multipart/form-data">
                                             
                                             <label class="labels">Рейтинг</label>
                                             <input type="text" style="width:40px" name="rating" autocomplete="off" list="ratinglist" />
@@ -148,6 +148,9 @@
             </div>
         </div>
         {% endfor %}
+        {% if not books_list.items %}
+            <i>Нет результатов фильтрации</i>
+        {% endif %}
     </div>
     <!-- </div> -->
 </div>
