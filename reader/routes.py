@@ -6,21 +6,48 @@ from PIL import Image
 from reader.forms import *
 from reader.validator import *
 from sqlalchemy.exc import IntegrityError
-from random import randrange
+from random import randrange, choice
 import datetime
-import eel
+
+from scripts import generate_quote
+
 
 current_user = -1
-
-@eel.expose
-def take_py(txt_in):
-    global txt
-    txt = txt_in
+app.jinja_env.globals.update(generate_quote=generate_quote)
 
 @app.route('/')
 def index():
-   bookss = Book.query.order_by(Book.title.desc()).paginate()
-   return render_template('index.html', books_list = bookss)
+    bookss = Book.query.order_by(Book.title.desc()).paginate()
+    authors = Author.query.order_by(Author.surname.desc()).paginate()
+    type = Type.query.order_by(Type.name.desc()).paginate()
+    publish = Publish.query.order_by(Publish.name.desc()).paginate()
+    level = Level.query.order_by(Level.name.desc()).paginate()
+    genre = Genre.query.order_by(Genre.name.desc()).paginate()
+
+    for book in bookss.items:
+        feedbacks = Feedback.query.filter(Feedback.book_id == book.book_id).paginate()
+        feedbacks = feedbacks.items
+        if feedbacks:
+            sumfeed = 0
+            for feed in feedbacks:
+                sumfeed += feed.rating
+            sumfeed /= len(feedbacks)
+
+            edit_book = Book.query.get(book.book_id)
+            edit_book.rating = round(sumfeed, 2)
+            db.session.commit()
+        else:
+            edit_book = Book.query.get(book.book_id)
+            edit_book.rating = 0
+            db.session.commit()
+
+    return render_template('index.html',
+                            books_list = bookss,
+                            authors=authors.items,
+                            type=type.items,
+                            publish=publish.items,
+                            level=level.items,
+                            genre=genre.items,)
 
 
 @app.route('/uploads/<filename>')
@@ -281,6 +308,26 @@ def editbook(book_id):
         db.session.commit()
         return redirect(url_for('admin_sklad'))
 
+@app.route('/<int:sort_id>')
+def sort(sort_id):
+   bookss = Book.query.order_by(Book.price.desc()).paginate()
+   if sort_id == 1:
+      bookss = Book.query.order_by(Book.price.asc()).paginate()
+   if sort_id == 2:
+      bookss = Book.query.order_by(Book.price.desc()).paginate()
+   if sort_id == 3:
+      bookss = Book.query.order_by(Book.rating.desc()).paginate()
+   if sort_id == 4:
+      bookss = Book.query.order_by(Book.rating.asc()).paginate()
+   if sort_id == 5:
+      bookss = Book.query.order_by(Book.title.asc()).paginate()
+   if sort_id == 6:
+      bookss = Book.query.order_by(Book.title.desc()).paginate()
+   if sort_id == 7:
+      bookss = Book.query.order_by(Book.year_publication.desc()).paginate()
+
+   return render_template('index.html', books_list = bookss)
+
 @app.route('/admin-users/')
 def admin_users():
     users = User.query.order_by(User.first_name.desc()).paginate()
@@ -379,12 +426,96 @@ def viewbook(book_id):
     genres = Genre.query.filter(Genre.genre_id == book.genre).paginate()
     publish = Publish.query.filter(Publish.publish_id == book.publish_id).paginate()
     type = Type.query.filter(Type.type_id == book.type_id).paginate()
+    feedback = Feedback.query.filter(Feedback.book_id == book_id).paginate()
+    users = User.query.order_by(User.user_id.asc()).paginate()
     return render_template('viewbook.html', book=book,
                             genre = genres.items[0].name,
                             rating_int = int(book.rating),
                             publish = publish.items[0].name,
                             type = type.items[0].name,
+                            user_id = current_user,
+                            feedback = feedback.items,
+                            users = users.items,
                             )
+
+@app.route('/buybook', methods= ['POST'])
+def buybook():
+    jsdata = request.form['javascript_data']
+    book_id = int(jsdata)
+    book = Book.query.get_or_404(book_id)
+    new_buy = Delivery(
+        date= datetime.datetime.today(),
+        count= 1,
+        description= book.title,
+        weight= book.weight,
+        user_id=current_user,
+        price=book.price,
+    )
+    db.session.add(new_buy)
+    book.count -= 1
+    db.session.commit()
+
+    deliverys = Delivery.query.order_by(Delivery.user_id == current_user).paginate()
+    
+    list_added = {}
+    deliverys = deliverys.items
+    for deliv in deliverys:
+        reg_date = f'{deliv.date.year}-{deliv.date.month}-{deliv.date.day}'
+        if not reg_date in list_added:
+            list_added[reg_date] = []
+        list_added[reg_date].append(deliv)
+    
+    for key, group in list_added.items():
+        if len(group) > 1:
+            count = 0
+            description =''
+            weight = 0
+            price = 0
+            for item in group:
+                count += item.count
+                description += item.description +'; '
+                weight += item.weight
+                price += item.price
+            
+            for item in group:
+                delivery = Delivery.query.get_or_404(item.delivery_id)
+                db.session.delete(delivery)
+            db.session.commit()
+
+            new_buy = Delivery(
+                            date= group[0].date,
+                            count= count,
+                            description= description,
+                            weight = weight,
+                            user_id=current_user,
+                            price=price,
+                    )
+            db.session.add(new_buy)
+            db.session.commit()
+
+    return {'ok':1}
+
+@app.route('/cosmos/')
+def cosmos():
+    return render_template('cosmos.html')
+
+@app.route('/feedlike/<int:book_id>/<int:rating>')
+def feedlike(book_id, rating):
+    feedback = Feedback.query.filter((Feedback.user_id == current_user)&(Feedback.book_id == book_id)).paginate()
+    feedback = feedback.items
+    if (not feedback) and (current_user!=-1):
+        with open('reader/uploads/feedback.txt', encoding='utf-8') as file:
+            txt = file.readlines()
+        new_feed = Feedback(
+            feedback_id = randrange(100,9999),
+            comment= choice(txt),
+            rating= rating,
+            user_id= current_user,
+            book_id= book_id,
+        )
+        db.session.add(new_feed)
+        db.session.commit()
+    return redirect(url_for('index'))
 
 @app.route('/account/add-profile.html', methods=['GET', 'POST'])
 def addprofile():

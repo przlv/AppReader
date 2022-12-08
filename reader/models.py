@@ -94,6 +94,7 @@ class Delivery(db.Model):
     weight: int
     #Foreign Key 
     user_id : int
+    price: int
     
     #initialization of the Delivery database fields 
     delivery_id = db.Column(INTEGER, primary_key=True)
@@ -103,6 +104,7 @@ class Delivery(db.Model):
     weight = db.Column(INTEGER, nullable=False)
     #initialization of Foreign Key 
     user_id = db.Column(INTEGER, nullable=False)
+    price = db.Column(INTEGER, nullable=False)
 
     def __repr__(self):
         return f'<Delivery {self. delivery_id} {self.date}>'
@@ -178,3 +180,20 @@ class Level(db.Model):
 
     def __repr__(self):
         return f'<Level {self.name}>'
+
+class Feedback(db.Model):
+    feedback_id: int
+    comment: str
+    rating: int
+    user_id: int
+    book_id: int
+    
+    #initialization of the Delivery database fields 
+    feedback_id = db.Column(INTEGER, primary_key=True)
+    comment = db.Column(db.String(1000), nullable=False)
+    rating = db.Column(INTEGER, nullable=False)
+    user_id = db.Column(INTEGER, nullable=False)
+    book_id = db.Column(INTEGER, nullable=False)
+
+    def __repr__(self):
+        return f'<Feedback {self.feedback_id}>'

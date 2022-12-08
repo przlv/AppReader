@@ -71,6 +71,7 @@ class UserForm(FlaskForm):
                                              Length(min=1, max=50)])
     UserType = StringField('Тип пользователя', validators=[DataRequired(),
                                              Length(min=1, max=50)])
+
     Regname = StringField('Логин', validators=[DataRequired(),
                                              Length(min=1, max=50)])
     Regemail =  StringField('Логин', validators=[DataRequired(),
@@ -80,3 +81,21 @@ class UserForm(FlaskForm):
     reglog =    StringField('Логин', validators=[DataRequired(),
                                              Length(min=1, max=50)])                                                                         
     submit = SubmitField('Обновить')
+
+
+class DeliveryForm(FlaskForm):
+    delivery_id = IntegerField('ID книги', validators=[DataRequired()])
+    date = DateField('Дата добавления', format='%Y-%m-%d')
+    count = IntegerField('Количество книг', validators=[DataRequired()])
+    weight = IntegerField('Вес', validators=[DataRequired()])
+    description = StringField('Описание', validators=[DataRequired(), Length(min=5, max=1000)])
+    price = IntegerField('Цена', validators=[DataRequired()])
+    submit = SubmitField('Добавить')
+
+class FeedbackForm(FlaskForm):
+    feedback_id = IntegerField('ID книги', validators=[DataRequired()])
+    comment = StringField('отзыв', validators=[DataRequired(), Length(min=1, max=1000)])
+    rating = IntegerField('оценка', validators=[DataRequired()])
+    user_id = IntegerField('ID пользователя', validators=[DataRequired()])
+    book_id = IntegerField('ID книги', validators=[DataRequired()])
+    submit = SubmitField('Добавить')
