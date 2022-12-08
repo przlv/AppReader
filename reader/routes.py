@@ -602,3 +602,20 @@ def addprofile():
                 return redirect(url_for('account'))
             else:
                 return render_template('add-profile.html', Regerror=result_valid[1])
+
+@app.route('/genreopen/<int:genre_id>')
+def genreopen(genre_id):
+    bookss = Book.query.filter(Book.genre == genre_id).paginate()
+    authors = Author.query.order_by(Author.surname.desc()).paginate()
+    type = Type.query.order_by(Type.name.desc()).paginate()
+    publish = Publish.query.order_by(Publish.name.desc()).paginate()
+    level = Level.query.order_by(Level.name.desc()).paginate()
+    genre = Genre.query.order_by(Genre.name.desc()).paginate()
+
+    return render_template('index.html',
+                            books_list = bookss,
+                            authors=authors.items,
+                            type=type.items,
+                            publish=publish.items,
+                            level=level.items,
+                            genre=genre.items,)
