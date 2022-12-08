@@ -6,17 +6,48 @@ from PIL import Image
 from reader.forms import *
 from reader.validator import *
 from sqlalchemy.exc import IntegrityError
-from random import randrange
+from random import randrange, choice
 import datetime
+
 from scripts import generate_quote
+
 
 current_user = -1
 app.jinja_env.globals.update(generate_quote=generate_quote)
 
 @app.route('/')
 def index():
-   bookss = Book.query.order_by(Book.title.desc()).paginate()
-   return render_template('index.html', books_list = bookss)
+    bookss = Book.query.order_by(Book.title.desc()).paginate()
+    authors = Author.query.order_by(Author.surname.desc()).paginate()
+    type = Type.query.order_by(Type.name.desc()).paginate()
+    publish = Publish.query.order_by(Publish.name.desc()).paginate()
+    level = Level.query.order_by(Level.name.desc()).paginate()
+    genre = Genre.query.order_by(Genre.name.desc()).paginate()
+
+    for book in bookss.items:
+        feedbacks = Feedback.query.filter(Feedback.book_id == book.book_id).paginate()
+        feedbacks = feedbacks.items
+        if feedbacks:
+            sumfeed = 0
+            for feed in feedbacks:
+                sumfeed += feed.rating
+            sumfeed /= len(feedbacks)
+
+            edit_book = Book.query.get(book.book_id)
+            edit_book.rating = round(sumfeed, 2)
+            db.session.commit()
+        else:
+            edit_book = Book.query.get(book.book_id)
+            edit_book.rating = 0
+            db.session.commit()
+
+    return render_template('index.html',
+                            books_list = bookss,
+                            authors=authors.items,
+                            type=type.items,
+                            publish=publish.items,
+                            level=level.items,
+                            genre=genre.items,)
 
 
 @app.route('/uploads/<filename>')
@@ -34,6 +65,7 @@ def genre():
     books = Book.query.filter(Book.genre == 'триллер').paginate(page=page, per_page=6)
     return render_template('genre.html', books=books)
 
+
 @app.route('/account/', methods=('GET', 'POST'))
 def account():
     global current_user
@@ -49,7 +81,6 @@ def account():
             Login = form.login.data
             Password = form.password.data
             result_valid = Account_validation(Login,Password)
-            
             if result_valid[1] == True:
                 user = User.query.get(result_valid[0])
                 user.last_logon = datetime.datetime.today()
@@ -61,6 +92,7 @@ def account():
                 return render_template('menu.html')
             else:
                 return render_template('account.html', error=result_valid[0]) 
+
 
 # @app.route('/create/', methods=('GET', 'POST'))
 # def create():
@@ -394,12 +426,16 @@ def viewbook(book_id):
     genres = Genre.query.filter(Genre.genre_id == book.genre).paginate()
     publish = Publish.query.filter(Publish.publish_id == book.publish_id).paginate()
     type = Type.query.filter(Type.type_id == book.type_id).paginate()
+    feedback = Feedback.query.filter(Feedback.book_id == book_id).paginate()
+    users = User.query.order_by(User.user_id.asc()).paginate()
     return render_template('viewbook.html', book=book,
                             genre = genres.items[0].name,
                             rating_int = int(book.rating),
                             publish = publish.items[0].name,
                             type = type.items[0].name,
                             user_id = current_user,
+                            feedback = feedback.items,
+                            users = users.items,
                             )
 
 @app.route('/buybook', methods= ['POST'])
@@ -465,12 +501,51 @@ def cosmos():
 
 @app.route('/feedlike/<int:book_id>/<int:rating>')
 def feedlike(book_id, rating):
-    new_feed = Feedback(
-        comment= 'None',
-        rating= rating,
-        user_id= current_user,
-        book_id= book_id,
-    )
-    db.session.add(new_feed)
-    db.session.commit()
+    feedback = Feedback.query.filter((Feedback.user_id == current_user)&(Feedback.book_id == book_id)).paginate()
+    feedback = feedback.items
+    if (not feedback) and (current_user!=-1):
+        with open('reader/uploads/feedback.txt', encoding='utf-8') as file:
+            txt = file.readlines()
+        new_feed = Feedback(
+            feedback_id = randrange(100,9999),
+            comment= choice(txt),
+            rating= rating,
+            user_id= current_user,
+            book_id= book_id,
+        )
+        db.session.add(new_feed)
+        db.session.commit()
     return redirect(url_for('index'))
+
+@app.route('/account/add-profile.html', methods=['GET', 'POST'])
+def addprofile():
+    form = UserForm(request.form)
+    if request.method == "GET":
+        return render_template('add-profile.html')
+    if request.method == "POST":
+        if form.validate_on_submit: 
+            RedEmail = form.Regemail.data
+            RegPass = form.Regpass.data
+            Regname =  form.Regname.data
+            result_valid = Registation_validation(Regname,RegPass,RedEmail)
+            if result_valid[0] == True:
+                new_User = User(
+                    first_name = form.first_name.data,
+                    surname = form.surname.data,
+                    last_name = form.last_name.data,
+                    last_logon = datetime.datetime.today(),
+                    phone = form.phone.data,
+                    zipcode = form.zipcode.data,
+                    address = form.address.data,
+                    email = form.Regemail.data,
+                    login = form.Regname.data,
+                    password = form.Regpass.data,
+                    RegDate= datetime.datetime.today(),
+                    UserType = "user",
+                    Auth = 0
+                )
+                db.session.add(new_User)
+                db.session.commit()
+                return redirect(url_for('account'))
+            else:
+                return render_template('add-profile.html', Regerror=result_valid[1])

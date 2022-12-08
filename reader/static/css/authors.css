@@ -36,7 +36,7 @@
    padding: 0;
    position: relative;
  }
- 
+/*  
  input[type="text"] {
    height: 60px;
    font-size: 35px;
@@ -89,7 +89,7 @@
  
  input[type="submit"]:hover {
    opacity: 0.9;
- }
+ } */
 
  .custom-dropdown {
    border: none !important;  

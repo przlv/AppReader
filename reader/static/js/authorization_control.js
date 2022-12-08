@@ -1,14 +1,21 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var btn = document.querySelector('.btn-authorization'),
-        loader = document.querySelector('.loader'),
-        check = document.querySelector('.check');
+    var btn = document.querySelector('.checkbox');
     
     btn.addEventListener('click', function () {
-      loader.classList.add('active');    
+      
+      if(document.querySelector('#reglog').value == 'on' )
+      {
+        document.querySelector('#reglog').value = 'off';
+      }
+      else
+      {
+        document.querySelector('#reglog').value = 'on'
+      }
     });
-   
-    loader.addEventListener('animationend', function() {
-      check.classList.add('active'); 
-    });
+    
+    btn.addEventListener('click',async function send () {
+      let val = document.getElementById('reglog').value;
+      await eel.take_py(val)();
+      });
   });
   
