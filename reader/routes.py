@@ -294,6 +294,7 @@ def about():
 
 @app.route('/admin-add-book/', methods=['GET', 'POST'])
 def admin_add_book():
+    authors = Author.query.order_by(Author.surname.desc()).paginate()
     if request.method == 'POST':
         formbook = BookForm(request.form)
         if request.files['cover']:
@@ -330,7 +331,7 @@ def admin_add_book():
         return redirect(url_for('admin_sklad'))
 
     elif request.method == 'GET':
-        return render_template('admin-add-book.html')
+        return render_template('admin-add-book.html', authors=authors.items)
 
 @app.route('/exit/')
 def exit():
