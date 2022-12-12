@@ -29,7 +29,10 @@
 
                     {{ book.rating }}
                 </p>
-                <i style="font-weight: bold;">Цена: {{ book.price }} ₽</i>
+                <div style="display: flex; flex-direction: column;">
+                    <i style="font-weight: bold;">Цена: {{ book.price }} ₽</i>
+                    <i style="font-weight: bold;">Цена доставки: {{ delivery_price}}</i>
+                </div>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"

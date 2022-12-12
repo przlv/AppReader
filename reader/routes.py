@@ -13,6 +13,7 @@ from scripts import generate_quote
 
 
 current_user = -1
+delivery_price = 'Чтобы узнать, войдите в личный кабинет'
 app.jinja_env.globals.update(generate_quote=generate_quote)
 
 @app.route('/', methods=('GET', 'POST'))
@@ -121,7 +122,7 @@ def genre():
 
 @app.route('/account/', methods=('GET', 'POST'))
 def account():
-    global current_user
+    global current_user, delivery_price
     form = UserForm(request.form)
     if request.method == "GET":
         if current_user != -1:
@@ -142,6 +143,11 @@ def account():
                 except:
                     db.session.rollback()
                 current_user = user.user_id
+                delivery_price = int(User.query.get_or_404(current_user).zipcode[:3])
+                if delivery_price < 200 or delivery_price > 600:
+                    delivery_price += randrange(100, 200)
+                else:
+                    delivery_price += randrange(1,50)
                 return render_template('menu.html')
             else:
                 return render_template('account.html', error=result_valid[0]) 
@@ -295,6 +301,10 @@ def about():
 @app.route('/admin-add-book/', methods=['GET', 'POST'])
 def admin_add_book():
     authors = Author.query.order_by(Author.surname.desc()).paginate()
+    genres = Genre.query.order_by(Genre.name.desc()).paginate()
+    publishes = Publish.query.order_by(Publish.name.desc()).paginate()
+    levels = Level.query.order_by(Level.name.desc()).paginate()
+
     if request.method == 'POST':
         formbook = BookForm(request.form)
         if request.files['cover']:
@@ -320,18 +330,18 @@ def admin_add_book():
             library_text= formbook.library_text.data,
             affinity= formbook.affinity.data,
             count= formbook.count.data,
-            author_id= formbook.author_id.data,
-            genre= formbook.genre.data,
-            publish_id = formbook.publish_id.data,
+            author_id= Author.query.filter(Author.first_name == request.form['author_id'].split(' ')[0]+' ').paginate().items[0].author_id,
+            genre= Genre.query.filter(Genre.name == request.form['genre']).paginate().items[0].genre_id,
+            publish_id = Publish.query.filter(Publish.name == request.form['publish_id']).paginate().items[0].publish_id,
             type_id = 1,
-            level_id= formbook.level_id.data      
+            level_id= Level.query.filter(Level.name == request.form['level_id']).paginate().items[0].Level_id     
         )
         db.session.add(new_book)
         db.session.commit()
         return redirect(url_for('admin_sklad'))
 
     elif request.method == 'GET':
-        return render_template('admin-add-book.html', authors=authors.items)
+        return render_template('admin-add-book.html', authors=authors.items, genres = genres.items, publishes=publishes.items, levels=levels.items)
 
 @app.route('/exit/')
 def exit():
@@ -499,17 +509,19 @@ def viewbook(book_id):
     book = Book.query.get_or_404(book_id)
     genres = Genre.query.filter(Genre.genre_id == book.genre).paginate()
     publish = Publish.query.filter(Publish.publish_id == book.publish_id).paginate()
-    type = Type.query.filter(Type.type_id == book.type_id).paginate()
+    typee = Type.query.filter(Type.type_id == book.type_id).paginate()
     feedback = Feedback.query.filter(Feedback.book_id == book_id).paginate()
     users = User.query.order_by(User.user_id.asc()).paginate()
+    if not type(delivery_price) == int: str(delivery_price)+' ₽' 
     return render_template('viewbook.html', book=book,
                             genre = genres.items[0].name,
                             rating_int = int(book.rating),
                             publish = publish.items[0].name,
-                            type = type.items[0].name,
+                            typee = typee.items[0].name,
                             user_id = current_user,
                             feedback = feedback.items,
                             users = users.items,
+                            delivery_price = delivery_price
                             )
 
 @app.route('/buybook', methods= ['POST'])
@@ -523,13 +535,13 @@ def buybook():
         description= book.title,
         weight= book.weight,
         user_id=current_user,
-        price=book.price,
+        price=book.price+delivery_price,
     )
     db.session.add(new_buy)
     book.count -= 1
     db.session.commit()
 
-    deliverys = Delivery.query.order_by(Delivery.user_id == current_user).paginate()
+    deliverys = Delivery.query.filter(Delivery.user_id == current_user).paginate()
     
     list_added = {}
     deliverys = deliverys.items
